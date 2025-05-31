@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" class="light-style layout-wide customizer-hide" dir="ltr">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        ontent="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Car Service Management</title>
+    <meta name="description" content="" />
+    <style>
+        .layout-wrapper.layout-content-navbar {
+            background-color: #1f2937 !important;
+        }
+
+        .text-blue-400 {
+            --tw-text-opacity: 1;
+            color: rgb(96 165 250 / var(--tw-text-opacity));
+        }
+    </style>
+    <script>
+        function site_url() {
+            return "https://tisco.oclocksoftware.info/api/";
+        }
+    </script>
+</head>
+
+<body>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="content-wrapper">
+            <div class="container-xxl new-body flex-grow-1 container-p-y">
+                <div class="row mb-2">
+                    <div class="col-xl">
+                        <div id="reader" class=""></div>
+                        <div class="mb-2">
+                            <div class="text-center">
+                                <div class="mt-3  d-none " id="scan-again-wrapper">
+                                    <button type="button" class="btn btn-secondary" id="scan-again">Scan Again</button>
+                                </div>
+                                <form method="GET" action="https://tiscoapi.oclocksoftware.info/api/qr-verify"
+                                    id="asset-form" class="d-none">
+                                    <input type="hidden" name="bookingNumber" id="qr-result">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+                <script>
+                    const qrRegionId = "reader";
+                    const reader = document.getElementById(qrRegionId);
+                    const scanAgainBtnWrapper = document.getElementById('scan-again-wrapper');
+                    const scanAgainBtn = document.getElementById('scan-again');
+                    const qrResultInput = document.getElementById('qr-result');
+                    const form = document.getElementById('asset-form');
+
+                    const html5QrCode = new Html5Qrcode(qrRegionId);
+                    const startScanner = () => {
+                        Html5Qrcode.getCameras().then(cameras => {
+                            if (cameras.length > 0) {
+                                const selectedCameraId = cameras[1]?.id || cameras[0]
+                                    .id; // fallback to first camera if second not found
+                                html5QrCode.start(
+                                    selectedCameraId, {
+                                    fps: 10,
+                                    qrbox: 200
+                                },
+                                    onScanSuccess
+                                ).then(() => {
+                                    // Smooth scroll to reader element
+                                    setTimeout(() => {
+                                        document.getElementById(qrRegionId).scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'start'
+                                        });
+                                    }, 300); // slight delay to ensure reader is visible
+                                }).catch(err => {
+                                    console.error("Start error:", err);
+                                });
+                            }
+                        }).catch(err => {
+                            console.error("Camera error:", err);
+                        });
+                    };
+
+
+                    const stopScanner = () => {
+                        html5QrCode.stop().then(() => {
+                            reader.classList.add('d-none');
+                            scanAgainBtnWrapper.classList.remove('d-none');
+                        }).catch(err => {
+                            console.error("Stop error:", err);
+                        });
+                    };
+
+                    const onScanSuccess = qrMessage => {
+                        qrResultInput.value = qrMessage;
+                        stopScanner();
+                        setTimeout(() => {
+                            form.action += '#asset-details';
+                            form.submit();
+                        }, 300);
+                    };
+
+                    // Auto start scanner only if no POST data
+                    startScanner();
+                    scanAgainBtn?.addEventListener('click', function () {
+                        scanAgainBtnWrapper.classList.add('d-none');
+                        reader.classList.remove('d-none');
+                        qrResultInput.value = '';
+                        startScanner();
+
+                        // Scroll reader to top smoothly
+                        setTimeout(() => {
+                            reader.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 300);
+                    });
+                </script>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
