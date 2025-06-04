@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { getAllStateCity, getAllServiceCenter } from '../../services/adminService';
 import Pagination from '../components/Pagination';
 import { useSidebar } from "../context/SidebarContext";
+import EditIcon from "../../assets/icons/edit";
+import DeleteIcon from "../../assets/icons/delete";
 const perPage = import.meta.env.VITE_PAGINATION
 
 const ServiceCenters: React.FC = () => {
@@ -346,7 +348,7 @@ const ServiceCenters: React.FC = () => {
                             resetForm();
                             setShowForm(true);
                         }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                        className="inline-flex items-center justify-center gap-2 rounded-lg transition  px-2 py-2 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300"
                     >
                         Add New Center
                     </button>
@@ -422,21 +424,21 @@ const ServiceCenters: React.FC = () => {
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                        <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Service Center
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Location
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Rating
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Actions
                                 </th>
                             </tr>
@@ -471,7 +473,7 @@ const ServiceCenters: React.FC = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <button
                                                 onClick={() => handleStatusToggle(center.id, center.status)}
-                                                className={`mr-2 px-3 py-1 rounded-md ${center.status === 'active'
+                                                className={`inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-theme-xs ${center.status === 'active'
                                                     ? 'bg-green-50 text-green-700 hover:bg-green-100'
                                                     : 'bg-red-50 text-red-700 hover:bg-red-100'
                                                     }`}
@@ -485,10 +487,7 @@ const ServiceCenters: React.FC = () => {
                                                 className="text-blue-600 hover:text-blue-900 mr-2"
                                             >
                                                 <span className="text-sm font-medium text-gray-900 flex items-center gap-1">
-                                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M20.9888 4.28491L19.6405 2.93089C18.4045 1.6897 16.4944 1.6897 15.2584 2.93089L13.0112 5.30042L18.7416 11.055L21.1011 8.68547C21.6629 8.1213 22 7.33145 22 6.54161C22 5.75176 21.5506 4.84908 20.9888 4.28491Z" fill="#030D45"/>
-                                                        <path d="M16.2697 10.9422L11.7753 6.42877L2.89888 15.3427C2.33708 15.9069 2 16.6968 2 17.5994V21.0973C2 21.5487 2.33708 22 2.89888 22H6.49438C7.2809 22 8.06742 21.6615 8.74157 21.0973L17.618 12.1834L16.2697 10.9422Z" fill="#030D45"/>
-                                                    </svg> 
+                                                    <EditIcon/>
                                                 </span>
                                             </button>
                                             <button
@@ -496,9 +495,7 @@ const ServiceCenters: React.FC = () => {
                                                 className="text-red-600 hover:text-red-900"
                                             >
                                                 <span className="text-sm font-medium text-gray-900 flex items-center gap-1">
-                                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H3a1 1 0 000 2h1v10a2 2 0 002 2h8a2 2 0 002-2V6h1a1 1 0 100-2h-2V3a1 1 0 00-1-1H6zm2 5a1 1 0 112 0v6a1 1 0 11-2 0V7zm4 0a1 1 0 112 0v6a1 1 0 11-2 0V7z" clip-rule="evenodd"/>
-                                                    </svg>
+                                                    <DeleteIcon/>
                                                 </span> 
                                             </button>
                                         </td>
@@ -751,13 +748,13 @@ const ServiceCenters: React.FC = () => {
                                     setSelectedCenter(null);
                                     resetForm();
                                 }}
-                                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
+                                className="inline-flex items-center justify-center gap-2 rounded-lg transition  px-2 py-2 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={selectedCenter ? handleUpdateCenter : handleAddCenter}
-                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                                className="inline-flex items-center justify-center gap-2 rounded-lg transition  px-2 py-2 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300"
                             >
                                 {selectedCenter ? 'Update Center' : 'Add Center'}
                             </button>

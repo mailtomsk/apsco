@@ -35,10 +35,16 @@ const Bookings: React.FC = () => {
     const [serviceCenterFilter, setServiceCenterFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
 
-
     const [selected, setSelected] = useState('');
     const options = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
 
+    const [activeTab, setActiveTab] = useState<'Pending' | 'Completed'>('Pending');
+    const tabStyle = (tab: string) =>
+        `px-4 py-2 rounded-md text-md font-medium transition bg-gray-100 ${activeTab === tab
+            ? 'bg-indigo-100 text-indigo-600'
+            : 'text-gray-600 hover:text-indigo-600'
+        }`;
+    
    // Get unique service centers for filter
     const serviceCenters = Array.from(new Set(bookings.map(booking => booking.serviceCenterName)));
 
@@ -75,8 +81,8 @@ const Bookings: React.FC = () => {
             console.error(error);
         })
     }
-    const getBooking = async() => {
-        await getAllBookings().then((response) => {
+    const getBooking = async (activeTab: string) => {
+        await getAllBookings(activeTab).then((response) => {
             const {success, data} = response;
             if (success){
                 setBookings(data);
@@ -90,7 +96,7 @@ const Bookings: React.FC = () => {
             await adminClient.post(`/v1/bookings/status-update`, { id: parseInt(id), status: value }).then((response) => {
                 const { success, message } = response.data;
                 if (success) {
-                    getBooking()
+                    getBooking(activeTab)
                     toast.success(message)
                 }
             }).catch((error: any) => {
@@ -99,9 +105,9 @@ const Bookings: React.FC = () => {
         }
     }
     useEffect(() => {
-        getBooking();
+        getBooking(activeTab);
         fetchServices();
-    }, []);
+    }, [activeTab]);
 
     const getStatusBadgeClass = (status: string) => {
         switch (status) {
@@ -191,40 +197,64 @@ const Bookings: React.FC = () => {
                     </div>
 
                     {/* Filter Stats */}
-                    <div className="mt-4 text-sm text-gray-600">
-                        Showing {filteredBookings.length} of {bookings.length} bookings
-                        {statusFilter !== 'all' && ` • ${statusFilter}`}
-                        {serviceTypeFilter !== 'all' && ` • ${serviceTypeFilter}`}
-                        {serviceCenterFilter !== 'all' && ` • ${serviceCenterFilter}`}
+                    <div className="mt-4 flex justify-between items-center">
+                        <div className="mt-4 text-sm text-gray-600">
+                            Showing {filteredBookings.length} of {bookings.length} bookings
+                            {statusFilter !== 'all' && ` • ${statusFilter}`}
+                            {serviceTypeFilter !== 'all' && ` • ${serviceTypeFilter}`}
+                            {serviceCenterFilter !== 'all' && ` • ${serviceCenterFilter}`}
+                            
+                        </div>
+                        {/* <button
+                            onClick={() => {
+                                setSearchTerm('');
+                                setDateFilter('');
+                                setStatusFilter('');
+                                setServiceTypeFilter('');
+                                setServiceCenterFilter('');
+                            }}
+                            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 focus:outline-none"
+                        >
+                            Clear Filters
+                        </button> */}
                     </div>
                 </div>
+            </div>
+
+            <div className="flex">
+                <button onClick={() => setActiveTab('Pending')} className={tabStyle('Pending')}>
+                    Pending
+                </button>
+                <button onClick={() => setActiveTab('Completed')} className={tabStyle('Completed')}>
+                    Completed
+                </button>
             </div>
 
             {/* Bookings Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                        <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Booking Details
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Customer & Vehicle
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Service Center
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Service Type
                                 </th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Package Type
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Notes
                                 </th>
                             </tr>
@@ -255,7 +285,7 @@ const Bookings: React.FC = () => {
                                             <div className="text-sm text-gray-900">{booking.packageType}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">    
-                                            <select
+                                            {/* <select
                                                 value={booking.status}
                                                 onChange={(e) => updateStatus(booking.id, e.target.value)}
                                                 disabled={booking.status === 'Completed'}
@@ -273,7 +303,13 @@ const Bookings: React.FC = () => {
                                                         {val}
                                                     </option>
                                                 ))}
-                                            </select>
+                                            </select> */}
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-theme-xs
+                                            ${booking.status === 'Pending' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-500/15 dark:text-yellow-500' : 
+                                            booking.status === 'Completed' ? 'bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500 ' :
+                                            booking.status === 'Cancelled' ? 'bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-500 ' : ''} `}>
+                                            {booking.status}
+                                            </span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="text-sm text-gray-900">{booking.notes}</div>
@@ -297,6 +333,7 @@ const Bookings: React.FC = () => {
                     )}
                 </div>
             </div>
+
         </div>
     );
 };

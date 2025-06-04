@@ -24,8 +24,8 @@ export const getAllServiceCenter = async() => {
     return (await adminClient.get('/v1/service-center')).data;
 }
 
-export const getAllBookings = async()=>{
-    return (await adminClient.get('/v1/bookings')).data
+export const getAllBookings = async (activeTab: string)=>{
+    return (await adminClient.get(`/v1/bookings?status=${activeTab}`)).data
 }
 
 export const getAllCounts = async()=>{

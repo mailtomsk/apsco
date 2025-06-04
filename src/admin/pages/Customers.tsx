@@ -3,6 +3,7 @@ import { getCustomers, customerDelete } from '../../services/adminService';
 import { toast } from 'react-toastify';
 import Pagination from '../components/Pagination';
 import adminClient from "../../services/adminClient";
+import DeleteIcon from "../../assets/icons/delete";
 const perPage = import.meta.env.VITE_PAGINATION
 
 interface Customer {
@@ -178,24 +179,24 @@ const Customers: React.FC = () => {
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                        <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Customer Details
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Contact Information
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Vehicles
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Booking History
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Account Verified
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Actions
                                 </th>
                             </tr>
@@ -241,7 +242,7 @@ const Customers: React.FC = () => {
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <button
                                                     onClick={() => handleVerified(customer.id, customer.is_verified)}
-                                                    className={`mr-2 px-3 py-1 rounded-md ${customer.is_verified
+                                                    className={`inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-theme-xs ${customer.is_verified
                                                         ? 'bg-green-50 text-green-700 hover:bg-green-100'
                                                         : 'bg-red-50 text-red-700 hover:bg-red-100'
                                                         }`}>
@@ -272,16 +273,14 @@ const Customers: React.FC = () => {
                                                     className="text-red-600 hover:text-red-900"
                                                 >
                                                     <span className="text-sm font-medium text-gray-900 flex items-center gap-1">
-                                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H3a1 1 0 000 2h1v10a2 2 0 002 2h8a2 2 0 002-2V6h1a1 1 0 100-2h-2V3a1 1 0 00-1-1H6zm2 5a1 1 0 112 0v6a1 1 0 11-2 0V7zm4 0a1 1 0 112 0v6a1 1 0 11-2 0V7z" clip-rule="evenodd"/>
-                                                        </svg>
+                                                        <DeleteIcon/>
                                                     </span> 
                                                 </button>
                                             </td>
                                         </tr>
                                         {showDetails === customer.id && (
                                             <tr>
-                                                <td colSpan={5} className="px-6 py-4 bg-gray-50">
+                                                <td colSpan={6} className="px-6 py-4 bg-gray-50">
                                                     <div className="text-sm">
                                                         <h3 className="font-medium text-gray-900 mb-2">Customer Details</h3>
                                                         <div className="grid grid-cols-2 gap-4">

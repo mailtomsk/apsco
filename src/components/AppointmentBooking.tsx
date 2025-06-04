@@ -132,8 +132,8 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
         let [hoursStr, minutesStr] = time.split(":");
         let hours = parseInt(hoursStr, 10);
         const minutes = parseInt(minutesStr, 10);
-        if (modifier === "PM" && hours !== 12) hours += 12;
-        if (modifier === "AM" && hours === 12) hours = 0;
+        if (modifier.toUpperCase() === "PM" && hours !== 12) hours += 12;
+        if (modifier.toUpperCase() === "AM" && hours === 12) hours = 0;
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
     }
     function formatTime(date: Date): string {
