@@ -177,7 +177,7 @@ const CarModels: React.FC = () => {
                         setselectedModel(null);
                         setShowModelForm(true);
                     }}
-                    className="inline-flex items-center justify-center gap-2 rounded-lg transition  px-2 py-2 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">
+                    className="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white px-2 py-2 text-sm text-brand-600 shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 hover:text-white border border-brand-600">
                     Add Car Model
                 </button>
             </div>
