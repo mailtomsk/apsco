@@ -40,9 +40,9 @@ const Bookings: React.FC = () => {
 
     const [activeTab, setActiveTab] = useState<'Pending' | 'Completed'>('Pending');
     const tabStyle = (tab: string) =>
-        `px-4 py-2 rounded-md text-md font-medium transition bg-gray-100 ${activeTab === tab
-            ? 'bg-indigo-100 text-indigo-600'
-            : 'text-gray-600 hover:text-indigo-600'
+        `px-4 py-2 rounded-md text-md font-medium transition rounded-[unset] w-[40%] ${activeTab === tab
+            ? 'text-indigo-600  border-b border-indigo-600'
+            : 'hover:text-indigo-600'
         }`;
     
    // Get unique service centers for filter
@@ -221,7 +221,7 @@ const Bookings: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex">
+            <div className="flex justify-around gap-[15px] mb-[15px]">
                 <button onClick={() => setActiveTab('Pending')} className={tabStyle('Pending')}>
                     Pending
                 </button>
