@@ -118,12 +118,13 @@ const CarBrands: React.FC = () => {
         setShowBrandForm(true);
     }
     const handleDeleteCarBrand = async (id: number) => {
-        if (confirm('Do you want update the Brand?')) {
+        if (confirm('Are you sure you want to delete this item?')) {
             adminClient.get(`/v1/carBrand/${id}/delete`).then((response) => {
                 const { success, message } = response.data;
                 if (success) {
                     toast.success(message);
                     fetchCarBrand();
+                    setCurrentPage(1);
                 }
             }).catch((error) => {
                 toast.error(error.message)
@@ -178,14 +179,14 @@ const CarBrands: React.FC = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-1 py-1 whitespace-nowrap">
+                                    <td className="px-4 py-1 whitespace-nowrap">
                                         <button
                                             className={`inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-theme-xs ${brand.status
                                                 ? 'bg-green-50 text-green-700 hover:bg-green-100'
                                                 : 'bg-red-50 text-red-700 hover:bg-red-100'
                                                 }`}
                                         >
-                                            {brand.status ? 'Ative' : 'Inactive'}
+                                            {brand.status ? 'Active' : 'Inactive'}
                                         </button>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -236,7 +237,7 @@ const CarBrands: React.FC = () => {
                         !isExpanded && !isHovered ? '' : 'lg:pl-[290px]'
                     }`}
                 > 
-                    <div className="relative top-20 mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white">
+                    <div className="relative top-20 mx-auto p-5 border w-1/2 md:w-1/4 shadow-lg rounded-md bg-white">
 
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-medium text-gray-900">
@@ -257,12 +258,13 @@ const CarBrands: React.FC = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="md:grid grid-cols-1 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Name</label>
                                 <input
                                     type="text"
                                     value={newBrand.name}
+                                    maxLength={50}
                                     onChange={(e) => setNewBrand({ ...newBrand, name: e.target.value })}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter Car-Brand name"

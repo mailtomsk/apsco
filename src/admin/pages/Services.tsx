@@ -139,6 +139,7 @@ const Services: React.FC = () => {
                 if (success) {
                     toast.success(message);
                     fetchServices();
+                    setCurrentPage(1);
                 }
             }).catch((error) => {
                 toast.error(error.message)
@@ -204,7 +205,7 @@ const Services: React.FC = () => {
                         <div className="lg:col-span-2">
                             <input
                                 type="text"
-                                placeholder="Search by name, address, or area..."
+                                placeholder="Search by name..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -258,14 +259,14 @@ const Services: React.FC = () => {
                             {currentItems.length > 0 ? (
                                 currentItems.map((service) => (
                                     <tr key={service.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{service.name}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{service.description}</div>
@@ -280,7 +281,7 @@ const Services: React.FC = () => {
                                                     : 'bg-red-50 text-red-700 hover:bg-red-100'
                                                     }`}
                                             >
-                                                {service.status ? 'Activate' : 'Deactivate'}
+                                                {service.status ? 'Activate' : 'Inactive'}
                                             </button>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -330,7 +331,7 @@ const Services: React.FC = () => {
                         !isExpanded && !isHovered ? '' : 'lg:pl-[290px]'
                     }`}
                 > 
-                    <div className="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-white">
+                    <div className="relative top-20 mx-auto p-5 border w-1/2 md:w-1/4 shadow-lg rounded-md bg-white">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-medium text-gray-900">
                                 {selectedService ? 'Edit Service' : 'Add New Service'}
@@ -349,11 +350,12 @@ const Services: React.FC = () => {
                                 </svg>
                             </button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid-cols-1 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Name</label>
                                 <input
                                     type="text"
+                                    maxLength={50}
                                     value={newService.name}
                                     onChange={(e) => setNewService({ ...newService, name: e.target.value })}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -382,8 +384,8 @@ const Services: React.FC = () => {
                                                 className="form-radio text-blue-600"
                                                 name="status"
                                                 value="active"
-                                                checked={newService.status}
-                                                onChange={(e) => setNewService({ ...newService, status: e.target.value as unknown as true | false })}
+                                                checked={newService.status === true}
+                                                onChange={(e) => setNewService({ ...newService, status: true })}
                                             />
                                             <span className="ml-2">Active</span>
                                         </label>
@@ -393,8 +395,8 @@ const Services: React.FC = () => {
                                                 className="form-radio text-blue-600"
                                                 name="status"
                                                 value="inactive"
-                                                checked={!newService.status}
-                                                onChange={(e) => setNewService({ ...newService, status: e.target.value as unknown as true | false })}
+                                                checked={newService.status === false}
+                                                onChange={(e) => setNewService({ ...newService, status: false })}
                                             />
                                             <span className="ml-2">Inactive</span>
                                         </label>

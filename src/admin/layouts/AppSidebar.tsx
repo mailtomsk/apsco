@@ -9,6 +9,7 @@ import PieChartIcon from "../../assets/icons/pie-chart";
 import PlugInIcon from "../../assets/icons/plug-in";
 import UserCircleIcon from "../../assets/icons/user-circle";
 import Table from "../../assets/icons/table";
+import Caricon from "../../assets/icons/Car";
 import { useSidebar } from "../context/SidebarContext";
 
 type NavItem = {
@@ -284,11 +285,10 @@ const AppSidebar: React.FC = () => {
             onMouseLeave={() => setIsHovered(false)}
         >
             <div
-                className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
-                    }`}
+                className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-center" }`}
             >
                 <Link to="/admin/dashboard">
-                    {isExpanded || isHovered || isMobileOpen ? (
+                    {isExpanded || isHovered  ? (
                         <>
                             <img
                                 className="dark:hidden"
@@ -297,21 +297,16 @@ const AppSidebar: React.FC = () => {
                                 width={120}
                                 height={40}
                             />
-                            <img
-                                className="hidden dark:block"
-                                src="/images/logo/logo.jpg"
-                                alt="Logo"
-                                width={120}
-                                height={40}
-                            />
                         </>
                     ) : (
-                        <img
-                            src="/images/logo/logo-icon.svg"
-                            alt="Logo"
-                            width={32}
-                            height={32}
-                        />
+                        <>
+                            {/* <img
+                                src="/images/logo/logo-icon.svg"
+                                alt="Logo"
+                                width={32}
+                                height={32}
+                            /> */}
+                        </>
                     )}
                 </Link>
             </div>

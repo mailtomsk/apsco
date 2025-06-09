@@ -324,6 +324,7 @@ const ServiceCenters: React.FC = () => {
     useEffect(() => {
         fetchCenter();
         fetchLocation();
+        setCurrentPage(1)
     }, [searchTerm, filterState, filterStatus, filterRating]);
 
     useEffect(() => {
@@ -545,11 +546,12 @@ const ServiceCenters: React.FC = () => {
                                 </svg>
                             </button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="md:grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Name</label>
                                 <input
                                     type="text"
+                                    maxLength={75}
                                     value={newCenter.name}
                                     onChange={(e) => setNewCenter({ ...newCenter, name: e.target.value })}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -651,7 +653,7 @@ const ServiceCenters: React.FC = () => {
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Working Hours</label>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-xs text-gray-500">Weekdays</label>
                                         <input
@@ -687,34 +689,10 @@ const ServiceCenters: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {['Premium Lounge', 'Free WiFi', 'Coffee Bar', 'Kids Area', 'Valet Parking'].map((amenity) => (
-                                        <div key={amenity} className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                id={amenity}
-                                                checked={newCenter.amenities?.includes(amenity)}
-                                                onChange={(e) => {
-                                                    const updatedAmenities = e.target.checked
-                                                        ? [...(newCenter.amenities || []), amenity]
-                                                        : (newCenter.amenities || []).filter(a => a !== amenity);
-                                                    setNewCenter({ ...newCenter, amenities: updatedAmenities });
-                                                }}
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                            />
-                                            <label htmlFor={amenity} className="ml-2 block text-sm text-gray-900">
-                                                {amenity}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div> */}
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">Status</label>
                                 <div className="mt-2">
-                                    <div className="flex items-center space-x-4">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                         <label className="inline-flex items-center">
                                             <input
                                                 type="radio"

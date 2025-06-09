@@ -90,14 +90,14 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onLogout }) => {
                     <Link to="/" className="lg:hidden">
                         <img
                             className="dark:hidden"
-                            src="/src/assets/images/logo/logo.jpg"
+                            src="/images/logo/logo.jpg"
                             alt="Logo"
                             width={100}
                             height={40}
                         />
                         <img
                             className="hidden dark:block"
-                            src="/src/assets/images/logo/logo.jpg"
+                            src="/images/logo/logo.jpg"
                             alt="Logo"
                             width={100}
                             height={40}

@@ -105,6 +105,7 @@ export default function RecentOrders() {
                                     </div>
                                 </TableCell>
                                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                    {booking.customerName}<br/>
                                     {booking.vehicleDetails.model} - {booking.vehicleDetails.plateNumber}
                                 </TableCell>
                                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
