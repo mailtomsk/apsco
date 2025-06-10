@@ -241,7 +241,7 @@ const ServiceCenters: React.FC = () => {
     };
 
     const handleDeleteCenter = (id: string) => {
-        if (confirm('Do you want delete the service center?')) {
+        if (confirm('Are you sure you want to delete?')) {
             adminClient.get(`/v1/service-center/${id}/delete`).then((response) => {
                 const { success, message } = response.data;
                 if (success) {

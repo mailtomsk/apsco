@@ -117,7 +117,7 @@ const State: React.FC = () => {
         setShowStatesForm(true);
     }
     const handleDeleteStates = async (id: number) => {
-        if (confirm('Are you sure you want to delete this item?')) {
+        if (confirm('Are you sure you want to delete?')) {
             adminClient.get(`/v1/states/${id}/delete`).then((response) => {
                 const { success, message } = response.data;
                 if (success) {

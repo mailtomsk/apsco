@@ -133,7 +133,7 @@ const Services: React.FC = () => {
     };
 
     const handleDeleteCenter = (id: string) => {
-        if (confirm('Do you want update the service?')) {
+        if (confirm('Are you sure you want to delete?')) {
             adminClient.get(`/v1/services/${id}/delete`).then((response) => {
                 const { success, message } = response.data;
                 if (success) {
@@ -205,7 +205,7 @@ const Services: React.FC = () => {
                         <div className="lg:col-span-2">
                             <input
                                 type="text"
-                                placeholder="Search by name..."
+                                placeholder="Search by name"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -259,21 +259,21 @@ const Services: React.FC = () => {
                             {currentItems.length > 0 ? (
                                 currentItems.map((service) => (
                                     <tr key={service.id}>
-                                        <td className="py-4 whitespace-nowrap">
+                                        <td className="px-1 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{service.name}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-4 whitespace-nowrap">
+                                        <td className="px-1 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{service.description}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-5 py-4 whitespace-nowrap">
                                             <button
                                                 onClick={() => handleStatusToggle(service.id, service.status)}
                                                 className={`inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-theme-xs ${service.status
@@ -351,7 +351,7 @@ const Services: React.FC = () => {
                             </button>
                         </div>
                         <div className="grid-cols-1 gap-4">
-                            <div>
+                            <div className='mb-[10px] mt-[10px]'>
                                 <label className="block text-sm font-medium text-gray-700">Name</label>
                                 <input
                                     type="text"
@@ -363,7 +363,7 @@ const Services: React.FC = () => {
                                 />
                                 {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
                             </div>
-                            <div>
+                            <div className='mb-[10px] mt-[10px]'>
                                 <label className="block text-sm font-medium text-gray-700">Description</label>
                                 <input
                                     type="text"

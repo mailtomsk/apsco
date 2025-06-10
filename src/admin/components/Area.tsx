@@ -144,7 +144,7 @@ const Area: React.FC = () => {
         setShowAreaForm(true)
     }
     const handleDeleteAreas = async (id: number) => {
-        if (confirm('Are you sure you want to delete this item?')) {
+        if (confirm('Are you sure you want to delete?')) {
             adminClient.get(`/v1/areas/${id}/delete`).then((response) => {
                 const { success, message } = response.data;
                 if (success) {
