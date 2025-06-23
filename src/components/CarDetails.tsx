@@ -4,7 +4,8 @@ import Header from './Header';
 import api from "../services/customer_api";
 import { carBrand, carModel } from '../data/malaysiaLocations';
 import { toast } from 'react-toastify';
-
+import { setStep } from "../auth/bookingSlice";
+import { useAppDispatch } from "../hooks";
 interface CarDetailsProps {
 	onBack: () => void;
 	onContinue: (carDetails: {
@@ -37,7 +38,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 	const [model, setModel] = useState(bookingCarModel || '');
 	const [year, setYear] = useState(bookingCarYear || '');
 	const [plateNumber, setPlateNumber] = useState(bookingCarNumber || '');
-
+	const dispatch = useAppDispatch();
 	const fetchCardetails = async () => {
 		await api.get('/customer/cardetails').then((response) => {
 			const data = response.data.data;
@@ -53,7 +54,9 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 		return carModels.filter((model: carModel) => model.carBrand.name === brand);
 	}, [brand, carModels]);
 
-	
+	const currentSteps = (currentStepString: string) => {
+		dispatch(setStep(currentStepString));
+	};
 	useEffect(() => {
 		fetchCardetails();
 	}, []);
@@ -76,29 +79,29 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 
 	return (
 		<MobileContainer>
-			<div className="min-h-screen bg-gray-50">
+			<div className="min-h-screen bg-white">
 				<Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
 				<div className="flex flex-col h-full">
 					{/* Progress Steps */}
 					<div className="px-4 py-4 border-b bg-white">
 						<div className="flex items-center justify-between">
 							<div className="flex-1 flex items-center">
-								<div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">1</div>
+								<div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
 								<div className="flex-1 h-0.5 bg-green-500"></div>
 							</div>
 							<div className="flex-1 flex items-center">
-								<div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">2</div>
+								<div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('appointment')}>2</div>
 								<div className="flex-1 h-0.5 bg-green-500"></div>
 							</div>
 							<div className="flex-1 flex items-center">
-								<div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">3</div>
+								<div className="cursor-pointer w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('car-details')}>3</div>
 								<div className="flex-1 h-0.5 bg-gray-300"></div>
 							</div>
 							<div className="flex-1 flex items-center">
-								<div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">4</div>
+								<div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('service-type')}>4</div>
 								<div className="flex-1 h-0.5 bg-gray-300"></div>
 							</div>
-							<div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">5</div>
+							<div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('summary')}>5</div>
 						</div>
 
 						<div className="mt-2 flex justify-between text-xs">
@@ -129,7 +132,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 							<div className="space-y-4">
 								{/* Car Brand */}
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
+									<label className="block text-[18px] text-gray-800 mb-1">
 										Car Brand
 									</label>
 									<select
@@ -139,7 +142,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 											setBrand(e.target.value);
 											setModel('Select Model');
 										}}
-										className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+										className="block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
 									>	
 										<option value=''>Select car brand</option>
 										{carBrands.map((car: carBrand) => (
@@ -152,7 +155,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 
 								{/* Car Model */}
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
+									<label className="block text-[18px] text-gray-800 text-gray-700 mb-1">
 										Car Model
 									</label>
 									<select
@@ -161,7 +164,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 											console.log('CarDetails: Model selected', e.target.value);
 											setModel(e.target.value);
 										}}
-										className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+										className="block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
 										disabled={brand === 'Select Brand'}
 									>
 										<option value="">Select an model</option>
@@ -175,7 +178,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 
 								{/* Manufacturing Year */}
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
+									<label className="block text-[18px] text-gray-800 text-gray-700 mb-1">
 										Manufacturing Year
 									</label>
 									<select
@@ -184,7 +187,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 											console.log('CarDetails: Year selected', e.target.value);
 											setYear(e.target.value);
 										}}
-										className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+										className="block w-full px-3 py-2 border border-gray-300 rtext-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
 									>
 										{years.map((y) => (
 											<option key={y} value={y}>{y}</option>
@@ -194,7 +197,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 
 								{/* Plate Number */}
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
+									<label className="block text-[18px] text-gray-800 text-gray-700 mb-1">
 										Plate Number
 									</label>
 									<input
@@ -205,7 +208,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 											setPlateNumber(upperCaseValue);
 										}}
 										placeholder="e.g., ABC1234"
-										className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+										className="block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
 									/>
 								</div>
 							</div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import MobileContainer from './MobileContainer';
 import Header from './Header';
+import { setStep } from "../auth/bookingSlice";
+import { useAppDispatch } from "../hooks";
 
 interface SummaryProps {
     onBack: () => void;
@@ -36,34 +38,38 @@ const Summary: React.FC<SummaryProps> = ({
     onViewBookingHistory,
     bookingDetails
 }) => {
+    const dispatch = useAppDispatch();
+    const currentSteps = (currentStepString: string) => {
+        dispatch(setStep(currentStepString));
+    };
     return (
         <MobileContainer>
             <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="px-4 py-3 border-b">
+                <div className="px-4 py-3">
                     <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
                 </div>
 
                 {/* Progress Steps */}
-                <div className="px-4 py-4 border-b bg-white">
+                <div className="px-4 py-4 bg-white">
                     <div className="flex items-center justify-between">
                         <div className="flex-1 flex items-center">
-                            <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">1</div>
+                            <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
                             <div className="flex-1 h-0.5 bg-green-500"></div>
                         </div>
                         <div className="flex-1 flex items-center">
-                            <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">2</div>
+                            <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('appointment')}>2</div>
                             <div className="flex-1 h-0.5 bg-green-500"></div>
                         </div>
                         <div className="flex-1 flex items-center">
-                            <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">3</div>
+                            <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('car-details')}>3</div>
                             <div className="flex-1 h-0.5 bg-green-500"></div>
                         </div>
                         <div className="flex-1 flex items-center">
-                            <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">4</div>
+                            <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('service-type')}>4</div>
                             <div className="flex-1 h-0.5 bg-green-500"></div>
                         </div>
-                        <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">5</div>
+                        <div className="cursor-pointer w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('summary')}>5</div>
                     </div>
 
                     <div className="mt-2 flex justify-between text-xs">
@@ -101,9 +107,9 @@ const Summary: React.FC<SummaryProps> = ({
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <h3 className="font-medium">Service Center</h3>
-                                    <p className="text-gray-600">{bookingDetails.serviceCenter.name}</p>
-                                    <p className="text-sm text-gray-500">{bookingDetails.serviceCenter.address}</p>
+                                    <h3 className="text-[18px] text-gray-800">Service Center</h3>
+                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.name}</p>
+                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.address}</p>
                                 </div>
                             </div>
                         </div>
@@ -117,9 +123,9 @@ const Summary: React.FC<SummaryProps> = ({
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <h3 className="font-medium">Vehicle Details</h3>
-                                    <p className="text-gray-600">{`${bookingDetails.vehicle.model} (${bookingDetails.vehicle.year})`}</p>
-                                    <p className="text-sm text-gray-500">Plate Number: {bookingDetails.vehicle.plateNumber}</p>
+                                    <h3 className="text-[18px] text-gray-800">Vehicle Details</h3>
+                                    <p className="text-[16px] text-gray-600">{`${bookingDetails.vehicle.model} (${bookingDetails.vehicle.year})`}</p>
+                                    <p className="text-[16px] text-gray-600">Plate Number: {bookingDetails.vehicle.plateNumber}</p>
                                 </div>
                             </div>
                         </div>
@@ -133,17 +139,17 @@ const Summary: React.FC<SummaryProps> = ({
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <h3 className="font-medium">Service Details</h3>
-                                    <div className="text-gray-600">
+                                    <h3 className="ftext-[18px] text-gray-800">Service Details</h3>
+                                    <div className="text-[16px] text-gray-600">
                                         <div> Package: {bookingDetails.services.packageType}</div>
                                     </div>
-                                    <div className="text-gray-600">
+                                    <div className="text-[16px] text-gray-600">
                                         {bookingDetails.services.selectedServices.map((service, index) => (
                                             <div key={index}>{service}</div>
                                         ))}
                                     </div>
                                     {bookingDetails.services.remarks && (
-                                        <p className="text-sm text-gray-500 mt-2">
+                                        <p className="text-[16px] text-gray-600 mt-2">
                                             Remarks: {bookingDetails.services.remarks}
                                         </p>
                                     )}
@@ -160,8 +166,8 @@ const Summary: React.FC<SummaryProps> = ({
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <h3 className="font-medium">Appointment Time</h3>
-                                    <p className="text-gray-600">
+                                    <h3 className="text-[18px] text-gray-800">Appointment Time</h3>
+                                    <p className="text-[16px] text-gray-600">
                                         {bookingDetails.appointment.date && bookingDetails.appointment.time ? (
                                             `${bookingDetails.appointment.date} at ${bookingDetails.appointment.time}`
                                         ) : (

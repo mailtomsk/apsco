@@ -74,7 +74,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({ onBack }) => {
     },[]);
     return (
         <MobileContainer>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-white">
                 {/* Header */}
                 <div className="bg-white shadow">
                     <div className="px-4 py-6">

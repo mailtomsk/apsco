@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ServiceCenter } from '../data/serviceCenters';
-import { TimeSlot } from '../data/timeSlots';
 import Header from './Header';
 import MobileContainer from './MobileContainer';
+import { setStep } from "../auth/bookingSlice";
+import { useAppDispatch } from "../hooks";
 
 interface AppointmentBookingProps {
     serviceCenter: ServiceCenter;
@@ -56,7 +57,10 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
             return [];
         }
     };
-
+    const dispatch = useAppDispatch();
+    const currentSteps = (currentStepString: string) => {
+        dispatch(setStep(currentStepString));
+    };
     const availableDates = getNext30Days();
 
     const handleDateSelect = (date: string) => {
@@ -175,29 +179,29 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
 
     return (
         <MobileContainer>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-white">
                 <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
                 <div className="flex flex-col h-full">
                     {/* Progress Steps */}
-                    <div className="px-4 py-4 border-b bg-white">
+                    <div className="px-4 py-4 bg-white">
                         <div className="flex items-center justify-between">
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">1</div>
+                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
                                 <div className="flex-1 h-0.5 bg-green-500"></div>
                             </div>
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">2</div>
+                                <div className="cursor-pointer w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('appointment')}>2</div>
+                                <div className="flex-1 h-0.5 bg-green-500"></div>
+                            </div>
+                            <div className="flex-1 flex items-center">
+                                <div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('car-details')}>3</div>
                                 <div className="flex-1 h-0.5 bg-gray-300"></div>
                             </div>
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">3</div>
+                                <div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('service-type')}>4</div>
                                 <div className="flex-1 h-0.5 bg-gray-300"></div>
                             </div>
-                            <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">4</div>
-                                <div className="flex-1 h-0.5 bg-gray-300"></div>
-                            </div>
-                            <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">5</div>
+                            <div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('summary')}>5</div>
                         </div>
 
                         <div className="mt-2 flex justify-between text-xs">
@@ -226,15 +230,15 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
                             </div>
 
                             {/* Service Center Info */}
-                            <div className="mb-6 p-3 bg-gray-50 rounded-lg">
-                                <h3 className="font-medium">{serviceCenter.name}</h3>
-                                <p className="text-sm text-gray-600 mt-1">{serviceCenter.address}</p>
-                                <p className="text-sm text-gray-600">{serviceCenter.area}, {serviceCenter.state} {/*serviceCenter.postalCode*/ }</p>
+                            <div className="mb-6 p-2 bg-white border">
+                                <h3 className="text-[18px] text-gray-800">{serviceCenter.name}</h3>
+                                <p className="text-[15px] text-gray-600 mt-1">{serviceCenter.address}</p>
+                                <p className="text-[15px] text-gray-600">{serviceCenter.area}, {serviceCenter.state} {/*serviceCenter.postalCode*/ }</p>
                             </div>
 
                             {/* Date Selection */}
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-[18px] text-gray-800 mb-2">
                                     Select a Date
                                 </label>
                                 <div className="flex overflow-x-auto pb-2 -mx-4 px-4 space-x-2">
@@ -248,12 +252,12 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
                                         <button
                                             key={day.date}
                                             onClick={() => handleDateSelect(day.date)}
-                                            className={`flex-shrink-0 px-4 py-2 rounded-lg border-2 ${selectedDate === day.date
-                                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                            className={`flex-shrink-0 px-4 py-2 border ${selectedDate === day.date
+                                                    ? 'border-blue-500 bg-blue-50 text-gray-700'
                                                     : 'border-gray-200 hover:border-gray-300'
                                                 }`}
                                         >
-                                            <div className="text-sm font-medium">{day.display}</div>
+                                                <div className="text-[16px] text-gray-800">{day.display}</div>
                                         </button>
                                     ))}
                                 </div>
@@ -345,7 +349,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
                                 <div className="space-y-6">
                                     <div>
                                         <div className="flex items-center mb-3">
-                                            <span className="text-base font-medium ml-2">Select a Time</span>
+                                            <span className="text-[18px] text-gray-800 ml-2">Select a Time</span>
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {timeSlots && timeSlots
@@ -354,7 +358,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
                                                     key={slot}
                                                     onClick={() => handleTimeSlotSelect(slot)}
                                                     disabled={!slot}
-                                                    className={`p-2 text-sm text-center border rounded-md transition-colors ${selectedTimeSlot === slot
+                                                        className={`p-2 text-[16px] text-gray-800 text-center border transition-colors ${selectedTimeSlot === slot
                                                         ? 'border-blue-500 bg-blue-50 text-blue-700'
                                                         : slot
                                                             ? 'hover:border-gray-400 text-gray-900'

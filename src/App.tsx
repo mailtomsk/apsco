@@ -347,7 +347,7 @@ const App: React.FC = () => {
                     <Route
                         path="/"
                         element={
-                            <div className="min-h-screen bg-gray-100">
+                            <div className="min-h-screen bg-white">
                                 {renderStep()}
                                 {showConfirmation && bookingReference && (
                                     <BookingConfirmation

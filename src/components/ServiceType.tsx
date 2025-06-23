@@ -4,6 +4,8 @@ import Header from './Header';
 import PackageA from '../assets/package-a.png';
 import api from "../services/customer_api";
 import { toast } from 'react-toastify';
+import { setStep } from "../auth/bookingSlice";
+import { useAppDispatch } from "../hooks";
 
 interface ServiceTypeProps {
     onBack: () => void;
@@ -36,7 +38,10 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     const [remarks, setRemarks] = useState(serviceRemark || '');
     const [packageType, setPackageType] = useState(servicePackage || 'A');
     const [services, setServices] = useState<Service[]>([]);
-
+    const dispatch = useAppDispatch();
+    const currentSteps = (currentStepString: string) => {
+        dispatch(setStep(currentStepString));
+    };
     const handleServiceToggle = (service: string) => {
         setSelectedServices(prev => {
             if (prev.includes(service)) {
@@ -71,29 +76,29 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     }, [])
     return (
         <MobileContainer>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-white">
                 <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
                 <div className="flex flex-col h-full">
                     {/* Progress Steps */}
                     <div className="px-4 py-4 border-b bg-white">
                         <div className="flex items-center justify-between">
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">1</div>
+                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
                                 <div className="flex-1 h-0.5 bg-green-500"></div>
                             </div>
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">2</div>
+                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('appointment')}>2</div>
                                 <div className="flex-1 h-0.5 bg-green-500"></div>
                             </div>
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">3</div>
+                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('car-details')}>3</div>
                                 <div className="flex-1 h-0.5 bg-green-500"></div>
                             </div>
                             <div className="flex-1 flex items-center">
-                                <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">4</div>
+                                <div className="cursor-pointer w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('service-type')}>4</div>
                                 <div className="flex-1 h-0.5 bg-gray-300"></div>
                             </div>
-                            <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm">5</div>
+                            <div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('summary')}>5</div>
                         </div>
 
                         <div className="mt-2 flex justify-between text-xs">
@@ -149,14 +154,14 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
 
                             {/* Specific Services */}
                             <div className="mb-6">
-                                <h3 className="text-base font-medium mb-2">Other Services</h3>
-                                <p className="text-sm text-gray-500 mb-4">You can select more than one</p>
+                                <h3 className="text-[18px] text-gray-800 mb-2">Other Services</h3>
+                                <p className="text-[15px] text-gray-500 mb-4">You can select more than one</p>
                                 <div className="grid grid-cols-2 gap-3">
                                     {services && services.map((service) => (
                                         <button
                                             key={service.id}
                                             onClick={() => handleServiceToggle(service.name)}
-                                            className={`p-3 rounded-lg border text-left ${selectedServices.includes(service.name)
+                                            className={`p-3 text-[16px] text-gray-800 border text-left ${selectedServices.includes(service.name)
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-300'
                                                 }`}
@@ -169,8 +174,8 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
 
                             {/* Remarks */}
                             <div className="mb-6">
-                                <h3 className="text-base font-medium mb-1">Remarks <span className="text-gray-500">(Optional)</span></h3>
-                                <p className="text-sm text-gray-500 mb-2">Is there anything specific that you would like to get fixed? e.g. timing belt issues, alignment issues, etc.</p>
+                                <h3 className="text-[18px] text-gray-800 mb-1">Remarks <span className="text-gray-500">(Optional)</span></h3>
+                                <p className="text-[15px] text-gray-500 mb-2">Is there anything specific that you would like to get fixed? e.g. timing belt issues, alignment issues, etc.</p>
                                 <textarea
                                     value={remarks}
                                     onChange={(e) => setRemarks(e.target.value)}

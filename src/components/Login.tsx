@@ -76,7 +76,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
     }, [rememberMe]);
     return (
         <MobileContainer>
-            <div className="min-h-screen bg-gray-50 px-4 py-8">
+            <div className="min-h-screen bg-white px-4 py-8">
                 {/* Logo and Title */}
                 <div className="text-center mb-12">
                     <AppLogo isChangeHeight={true}/>

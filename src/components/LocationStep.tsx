@@ -60,7 +60,6 @@ const LocationStep: React.FC<LocationStepProps> = ({
             center => center.state === selectedState.name && center.area === selectedArea.name
         );
     }, [selectedState, selectedArea, serviceCenters]);
-
     useEffect(() => {
         fetchLocation();
         if (selectedState && selectedArea) {
@@ -70,13 +69,13 @@ const LocationStep: React.FC<LocationStepProps> = ({
 
     return (
         <MobileContainer>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-white">
                 <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
 
                 <div className="p-4">
                     {/* State Selection */}
                     <div className="mb-6">
-                        <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="state" className="block text-[15px] text-gray-800 mb-2">
                             Select State
                         </label>
                         <select
@@ -87,7 +86,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                 setSelectedState(state || null);
                                 setSelectedArea(null);
                             }}
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            className="block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
                         >
                             <option value="">Select a state</option>
                             {states.map((state: State) => (
@@ -101,7 +100,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
                     {/* Area Selection */}
                     {selectedState && (
                         <div className="mb-6">
-                            <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="area" className="block text-[15px] text-gray-800 mb-2">
                                 Select Area
                             </label>
                             <select
@@ -111,7 +110,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                     const area = areas.find((a: Area) => a.name === e.target.value);
                                     setSelectedArea(area || null);
                                 }}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                className="block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
                             >
                                 <option value="">Select an area</option>
                                 {filteredAreas.map((area: Area) => (

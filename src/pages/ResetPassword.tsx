@@ -60,7 +60,7 @@ const ResetPassword = () => {
         <div className="min-h-screen bg-gray-100">
             <div className="min-h-screen bg-gray-100 flex justify-center">
                 <div className="w-full max-w-[420px] bg-white min-h-screen shadow-lg">
-                    <div className="min-h-screen bg-gray-50 px-4 py-8">
+                    <div className="min-h-screen bg-white px-4 py-8">
                         <div className="text-center">
                             <AppLogo isChangeHeight={true} />
                             <h2 className="mt-4 text-center text-3xl font-bold text-gray-900">Reset Password</h2>

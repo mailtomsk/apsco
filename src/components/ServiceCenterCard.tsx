@@ -37,11 +37,11 @@ const ServiceCenterCard: React.FC<ServiceCenterCardProps> = ({ center, onClick }
 
   return (
     <div
-      className="border rounded-lg overflow-hidden hover:border-blue-500 active:bg-blue-50 cursor-pointer transition-all duration-200"
+      className="border overflow-hidden hover:border-blue-500 active:bg-blue-50 cursor-pointer transition-all duration-200"
       onClick={onClick}
     >
       {/* Image */}
-      <div className="relative h-48 bg-gray-200">
+      <div className="relative h-35 bg-gray-200">
         <img
           src={center.thumbnail}
           alt={center.name}
@@ -50,7 +50,7 @@ const ServiceCenterCard: React.FC<ServiceCenterCardProps> = ({ center, onClick }
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-2">
         <h3 className="text-lg font-semibold text-gray-900">{center.name}</h3>
         <p className="mt-1 text-sm text-gray-600">{center.address}</p>
 

@@ -18,7 +18,7 @@ const ServiceCenterList: React.FC<ServiceCenterListProps> = ({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="max-w-3xl mx-auto py-8 px-4">
         <div className="flex items-center justify-between mb-8">
           <button className="text-blue-600 flex items-center">
