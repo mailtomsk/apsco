@@ -6,6 +6,7 @@ import api from "../services/customer_api";
 import { toast } from 'react-toastify';
 import { setStep } from "../auth/bookingSlice";
 import { useAppDispatch } from "../hooks";
+import StepProgress from './StepProgress';
 
 interface ServiceTypeProps {
     onBack: () => void;
@@ -79,36 +80,7 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
             <div className="min-h-screen bg-white">
                 <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
                 <div className="flex flex-col h-full">
-                    {/* Progress Steps */}
-                    <div className="px-4 py-4 border-b bg-white">
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1 flex items-center">
-                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
-                                <div className="flex-1 h-0.5 bg-green-500"></div>
-                            </div>
-                            <div className="flex-1 flex items-center">
-                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('appointment')}>2</div>
-                                <div className="flex-1 h-0.5 bg-green-500"></div>
-                            </div>
-                            <div className="flex-1 flex items-center">
-                                <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('car-details')}>3</div>
-                                <div className="flex-1 h-0.5 bg-green-500"></div>
-                            </div>
-                            <div className="flex-1 flex items-center">
-                                <div className="cursor-pointer w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('service-type')}>4</div>
-                                <div className="flex-1 h-0.5 bg-gray-300"></div>
-                            </div>
-                            <div className="cursor-pointer w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-sm" onClick={() => currentSteps('summary')}>5</div>
-                        </div>
-
-                        <div className="mt-2 flex justify-between text-xs">
-                            <span className="text-green-500">Location</span>
-                            <span className="text-green-500">Appointment</span>
-                            <span className="text-green-500">Car Details</span>
-                            <span className="text-blue-500">Service Type</span>
-                            <span className="text-gray-500">Summary</span>
-                        </div>
-                    </div>
+                    <StepProgress/>
 
                     {/* Main Content */}
                     <div className="flex-1 overflow-auto">

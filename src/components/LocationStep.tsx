@@ -29,7 +29,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
     const [serviceCenters, setServiceCenters] = useState<ServiceCenter[]>([]);
     
     const fetchLocation = async () => {
-        await api.get('/customer/service-location').then((response) => {
+        await api.get('/customer/service-location-state').then((response) => {
             const data = response.data.data;
             setStates(data.allState);
             setAreas(data.allCity);
@@ -74,7 +74,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
 
                 <div className="p-4">
                     {/* State Selection */}
-                    <div className="mb-6">
+                    <div className="mb-6 relative">
                         <label htmlFor="state" className="block text-[15px] text-gray-800 mb-2">
                             Select State
                         </label>
@@ -86,7 +86,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                 setSelectedState(state || null);
                                 setSelectedArea(null);
                             }}
-                            className="block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
+                            className="block appearance-none w-full px-3 py-2 cursor-pointer bg-white border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
                         >
                             <option value="">Select a state</option>
                             {states.map((state: State) => (
@@ -95,11 +95,16 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                 </option>
                             ))}
                         </select>
+                        <div className="pointer-events-none absolute top-[75%] right-3 transform -translate-y-1/2 text-gray-600">
+                            <svg className="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M7 7l3 3 3-3" />
+                            </svg>
+                        </div>
                     </div>
 
                     {/* Area Selection */}
                     {selectedState && (
-                        <div className="mb-6">
+                        <div className="mb-6 relative">
                             <label htmlFor="area" className="block text-[15px] text-gray-800 mb-2">
                                 Select Area
                             </label>
@@ -110,7 +115,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                     const area = areas.find((a: Area) => a.name === e.target.value);
                                     setSelectedArea(area || null);
                                 }}
-                                className="block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
+                                className="block appearance-none w-full px-3 py-2 cursor-pointer bg-white border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-[17px] text-gray-800"
                             >
                                 <option value="">Select an area</option>
                                 {filteredAreas.map((area: Area) => (
@@ -119,6 +124,11 @@ const LocationStep: React.FC<LocationStepProps> = ({
                                     </option>
                                 ))}
                             </select>
+                            <div className="pointer-events-none absolute top-[75%] right-3 transform -translate-y-1/2 text-gray-600">
+                                <svg className="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M7 7l3 3 3-3" />
+                                </svg>
+                            </div>
                         </div>
                     )}
 
