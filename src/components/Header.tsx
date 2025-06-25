@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory }) => {
         <div className="flex justify-center items-center">
           {/* <h1 className="text-2xl font-bold text-blue-600">TISCO</h1> */}
           <AppLogo isChangeHeight={true} isCenterAlign={false} />
-          <div className="relative left-[25%]">
+          <div className="relative left-[20%]">
             <button
               onClick={toggleMenu}
               className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none">
