@@ -46,12 +46,12 @@ const Summary: React.FC<SummaryProps> = ({
         <MobileContainer>
             <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="px-4 py-3">
-                    <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
+                <div className="py-3">
+                    <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack}/>
                 </div>
 
                 {/* Progress Steps */}
-                <div className="px-4 py-4 bg-white">
+                <div className="px-4 py-4 bg-white flex flex-col h-full w-full max-w-[420px] mx-auto">
                     <div className="flex items-center justify-between">
                         <div className="flex-1 flex items-center">
                             <div className="cursor-pointer w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-sm" onClick={() => currentSteps('location')}>1</div>
@@ -82,19 +82,10 @@ const Summary: React.FC<SummaryProps> = ({
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-auto">
+                <div className="flex-1 overflow-auto flex flex-col h-full w-full max-w-[420px] mx-auto">
                     <div className="p-4">
                         <div className="flex items-center mb-6">
-                            <button
-                                onClick={onBack}
-                                className="flex items-center text-blue-500"
-                            >
-                                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back
-                            </button>
-                            <h2 className="text-lg font-semibold ml-3">Booking Summary</h2>
+                            <h2 className="text-lg font-semibold">Booking Summary</h2>
                         </div>
 
                         {/* Service Center Details */}

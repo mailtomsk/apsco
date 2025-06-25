@@ -55,7 +55,6 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     const fetchServices = async() => {
         await api.get('/customer/serviceDetails').then((response) => {
             const data = response.data.data;
-            console.log(data);
             
             setServices(data);
         }).catch((error) => {
@@ -78,24 +77,15 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white">
-                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
-                <div className="flex flex-col h-full">
+                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack}/>
+                <div className="flex flex-col h-full w-full max-w-[420px] mx-auto">
                     <StepProgress/>
 
                     {/* Main Content */}
                     <div className="flex-1 overflow-auto">
                         <div className="p-4">
                             <div className="flex items-center mb-4">
-                                <button
-                                    onClick={onBack}
-                                    className="flex items-center text-blue-500"
-                                >
-                                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                    Back
-                                </button>
-                                <h2 className="text-lg font-semibold ml-3">I'm Looking For...</h2>
+                                <h2 className="text-lg font-semibold">I'm Looking For...</h2>
                             </div>
 
                             {/* Service Packages */}

@@ -27,7 +27,7 @@ interface BookingState {
 }
 
 const initialState: BookingState = {
-    step: 'login',
+    step: 'location',
     selectedState: null,
     selectedArea: null,
     selectedCenter: null,

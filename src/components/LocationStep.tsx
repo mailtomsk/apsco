@@ -70,9 +70,9 @@ const LocationStep: React.FC<LocationStepProps> = ({
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white">
-                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
+                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} hideBack={true}/>
 
-                <div className="p-4">
+                <div className="p-4 flex flex-col h-full w-full max-w-[420px] mx-auto">
                     {/* State Selection */}
                     <div className="mb-6 relative">
                         <label htmlFor="state" className="block text-[15px] text-gray-800 mb-2">

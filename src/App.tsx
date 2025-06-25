@@ -60,27 +60,37 @@ const App: React.FC = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showBookingHistory, setShowBookingHistory] = useState(false);
+    const [showLoginAtSummary, setShowLoginAtSummary] = useState(false);
+    const [pendingBooking, setPendingBooking] = useState(false);
     
     const currentStep = useAppSelector((state) => state.auth.booking.step as Step);
-    const isLoggedIn = useAppSelector((state) => state.auth.customerAuth);
+    const isLoggedIn = useAppSelector((state) => state.auth.customerAuth?.isLoggedIn);
     const { selectedState, selectedArea, selectedCenter } = useAppSelector((state) => state.auth.booking);
     const { appointmentDate, appointmentTime } = useAppSelector((state) => state.auth.booking);
     const { carDetails } = useAppSelector((state) => state.auth.booking);
     const { serviceDetails } = useAppSelector((state) => state.auth.booking);
     const dispatch = useAppDispatch();
+
     useEffect(() => {
         if (token && userId) {
             dispatch(restoreCustomerSession());
-            if (currentStep === 'login') { 
-                dispatch(setStep('location'));
-            }
-        } else {
-            handleLogout();
         }
-    }, [currentStep, selectedState, selectedArea, selectedCenter, appointmentDate, appointmentTime, carDetails, dispatch, token, userId]);
+    }, [dispatch, token, userId]);
+
+    useEffect(() => {
+        if (pendingBooking && isLoggedIn) {
+            setPendingBooking(false);
+            setShowLoginAtSummary(false);
+            handleConfirmBooking(true);
+        }
+    }, [pendingBooking, isLoggedIn]);
 
     const handleLoginSuccess = () => {
-        dispatch(setStep('location'));
+        setShowLoginAtSummary(false);
+        if (pendingBooking) {
+            setPendingBooking(false);
+            handleConfirmBooking(true);
+        }
     };
 
     const handleLogout = () => {
@@ -89,7 +99,7 @@ const App: React.FC = () => {
         dispatch(setCarDetails({ carDetails: null }));
         dispatch(setServiceDetails({ serviceDetails: null }));
         dispatch(logoutCustomer());
-        dispatch(setStep('login'));
+        dispatch(setStep('location'));
         setError(null);
     };
 
@@ -150,7 +160,12 @@ const App: React.FC = () => {
         }
     };
 
-    const handleConfirmBooking = () => {
+    const handleConfirmBooking = (skipLoginCheck = false) => {
+        if (!isLoggedIn && !skipLoginCheck) {
+            setShowLoginAtSummary(true);
+            setPendingBooking(true);
+            return;
+        }
         try {
             const newBookingRef = 'BK' + Math.random().toString(36).substring(2, 10).toUpperCase();
             setBookingReference(newBookingRef);
@@ -210,29 +225,20 @@ const App: React.FC = () => {
     };
 
     const renderStep = () => {
-        if (!isLoggedIn) {
-            return <Login
-            onLoginSuccess={handleLoginSuccess}
-            onForgotPasswordClick={handleForgotPasswordClick}
-            onSignUpClick={handleSignUpClick}
-            />;
-        }
         if (showForgotPassword) {
             return <ForgotPassword onBackToLogin={handleBackToLogin} />;
         }
         if (isSignUp) {
             return <SignUp onBackToLogin={handleBackToLogin} />;
         }
-
         if (showBookingHistory) {
-            return <BookingHistory onBack={handleBackFromBookingHistory} />;
+            return <BookingHistory onBack={handleBackFromBookingHistory} onLogout={handleLogout}
+            onViewBookingHistory={handleViewBookingHistory}/>;
         }
-
         try {
             switch (currentStep) {
                 case 'login':
                     return <Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} />;
-
                 case 'location':
                     return <LocationStep
                         key={Date.now()}
@@ -242,7 +248,6 @@ const App: React.FC = () => {
                         bookingState={selectedState}
                         bookingArea={selectedArea}
                     />;
-
                 case 'appointment':
                     if (!selectedCenter) {
                         dispatch(setStep('location'));
@@ -259,9 +264,7 @@ const App: React.FC = () => {
                             bookingTime={appointmentTime}
                         />
                     );
-
                 case 'car-details':
-                    console.log('Rendering CarDetails component');
                     return (
                         <CarDetails
                             onBack={handleBack}
@@ -274,7 +277,6 @@ const App: React.FC = () => {
                             bookingCarNumber={carDetails?.plateNumber || ''}
                         />
                     );
-
                 case 'service-type':
                     return (
                         <ServiceType
@@ -287,38 +289,49 @@ const App: React.FC = () => {
                             servicePackage={serviceDetails?.packageType || 'A' }
                         />
                     );
-
                 case 'summary':
                     if (!selectedCenter || !carDetails || !serviceDetails || !appointmentDate || !appointmentTime) {
-                        console.error('Missing required details for summary');
                         setError('Missing booking details');
                         return null;
                     }
                     return (
-                        <Summary
-                            onBack={() => dispatch(setStep('service-type'))}
-                            onConfirm={handleConfirmBooking}
-                            onLogout={handleLogout}
-                            onViewBookingHistory={handleViewBookingHistory}
-                            bookingDetails={{
-                                serviceCenter: {
-                                    name: selectedCenter.name,
-                                    address: selectedCenter.address
-                                },
-                                vehicle: {
-                                    model: `${carDetails.brand} ${carDetails.model}`,
-                                    year: carDetails.year,
-                                    plateNumber: carDetails.plateNumber
-                                },
-                                services: serviceDetails,
-                                appointment: {
-                                    date: appointmentDate,
-                                    time: appointmentTime
-                                }
-                            }}
-                        />
+                        <>
+                            <Summary
+                                onBack={() => dispatch(setStep('service-type'))}
+                                onConfirm={() => handleConfirmBooking(false)}
+                                onLogout={handleLogout}
+                                onViewBookingHistory={handleViewBookingHistory}
+                                bookingDetails={{
+                                    serviceCenter: {
+                                        name: selectedCenter.name,
+                                        address: selectedCenter.address
+                                    },
+                                    vehicle: {
+                                        model: `${carDetails.brand} ${carDetails.model}`,
+                                        year: carDetails.year,
+                                        plateNumber: carDetails.plateNumber
+                                    },
+                                    services: serviceDetails,
+                                    appointment: {
+                                        date: appointmentDate,
+                                        time: appointmentTime
+                                    }
+                                }}
+                            />
+                            {showLoginAtSummary && (
+                                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                                        <Login
+                                            onLoginSuccess={handleLoginSuccess}
+                                            onForgotPasswordClick={handleForgotPasswordClick}
+                                            onSignUpClick={handleSignUpClick}
+                                        />
+                                        <button className="mt-4 text-blue-500" onClick={() => setShowLoginAtSummary(false)}>Cancel</button>
+                                    </div>
+                                </div>
+                            )}
+                        </>
                     );
-
                 default:
                     return null;
             }
@@ -344,7 +357,7 @@ const App: React.FC = () => {
                     <Route path="/admin/*" element={<Admin />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/verify-email/:token" element={<VerifyEmail />} />
-                    <Route path="/register-complete" element={<RegisterComplete />} />
+                    <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin}/>} />
                     {/* Main App Routes */}
                     <Route
                         path="/"

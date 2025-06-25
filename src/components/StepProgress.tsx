@@ -31,7 +31,6 @@ const currentStep = (() => {
 })();
 
 const handleStepClick = (index: number) => {
-  console.log(stepKeys[index]);
   if (index <= currentStep) {
     dispatch(setStep(stepKeys[index]));
   }
@@ -44,8 +43,6 @@ return (
             {stepLabels.map((label, index) => {
             const isCompleted = index < currentStep;
             const isCurrent = index === currentStep;
-
-            console.log(isCurrent+' == '+currentStep);
 
             const circleClasses = [
                 'w-7 h-7 rounded-full flex items-center justify-center text-sm',

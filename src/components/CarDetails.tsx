@@ -92,8 +92,8 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 	return (
 		<MobileContainer>
 			<div className="min-h-screen bg-white">
-				<Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} />
-				<div className="flex flex-col h-full">
+				<Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} />
+				<div className="flex flex-col h-full w-full max-w-[420px] mx-auto">
 					{/* Progress Steps */}
 					<StepProgress/>
 
@@ -101,16 +101,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 					<div className="flex-1 overflow-auto">
 						<div className="p-4">
 							<div className="flex items-center mb-4">
-								<button
-									onClick={onBack}
-									className="flex items-center text-blue-500"
-								>
-									<svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-									</svg>
-									Back
-								</button>
-								<h2 className="text-lg font-semibold ml-3">Car Details</h2>
+								<h2 className="text-lg font-semibold">Car Details</h2>
 							</div>
 
 							<div className="space-y-7">
@@ -122,7 +113,6 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 									<select
 										value={brand}
 										onChange={(e) => {
-											console.log('CarDetails: Brand selected', e.target.value);
 											setBrand(e.target.value);
 											setModel('Select Model');
 										}}
@@ -150,7 +140,6 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 									<select
 										value={model}
 										onChange={(e) => {
-											console.log('CarDetails: Model selected', e.target.value);
 											setModel(e.target.value);
 										}}
 										className="block appearance-none w-full px-3 py-2 cursor-pointer bg-white border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"

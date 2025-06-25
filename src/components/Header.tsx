@@ -1,33 +1,53 @@
 import React, { useState } from 'react';
-import { User, LogOut, History } from 'lucide-react';
+import { LogOut, History, Menu } from 'lucide-react';
 import AppLogo from './AppLogo';
+import { useAppSelector } from '../hooks';
 
 
 interface HeaderProps {
+  onBack?: () => void;
   onLogout: () => void;
   onViewBookingHistory: () => void;
+  hideBack?: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory }) => {
+const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack, hideBack = false }) => {
   const [showMenu, setShowMenu] = useState(false);
-
+  const isAuthenticated = useAppSelector((state) => state.auth.customerAuth.isLoggedIn);
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
   return (
     <header className="bg-white">
-      <div className="px-4 py-6">
-        <div className="flex justify-center items-center">
+      <div className="py-6">
+        <div className="justify-center items-center grid grid-cols-12">
           {/* <h1 className="text-2xl font-bold text-blue-600">TISCO</h1> */}
-          <AppLogo isChangeHeight={true} isCenterAlign={false} />
-          <div className="relative left-[20%]">
+          {!hideBack && (
             <button
-              onClick={toggleMenu}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none">
-              <User className="w-6 h-6 text-gray-600" />
+              onClick={onBack}
+              className="flex items-center text-blue-500 col-span-2 justify-self-center"
+            >
+              <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back
             </button>
+          )}
 
+          {hideBack && (
+            <div className="col-span-2"></div>
+          )}
+          
+          <AppLogo isChangeHeight={true} isCenterAlign={false}/>
+          <div className="relative col-span-2 justify-self-center mx-auto">
+            {isAuthenticated && (
+              <button
+                onClick={toggleMenu}
+                className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none">
+                <Menu className="w-6 h-6 text-gray-600" />
+              </button>
+            )}
             {showMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                 <button

@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppLogo from '../components/AppLogo';
 import { setStep } from "../auth/bookingSlice";
 import { useAppDispatch } from "../hooks";
 
-const RegisterComplete  = () => {
+interface RegisterCompleteProps {
+    handleBackToLogin: () => void;
+}
+
+const RegisterComplete: React.FC<RegisterCompleteProps>  = ({handleBackToLogin}) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const onSigninClick = () => {
         dispatch(setStep('login'));
         navigate('/')
+        handleBackToLogin()
     }
     useEffect(() => {
         // setTimeout(() => {
