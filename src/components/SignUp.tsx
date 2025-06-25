@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MobileContainer from './MobileContainer';
 import api from "../services/customer_api";
 import { toast } from "react-toastify";
@@ -6,7 +7,6 @@ import AppLogo from './AppLogo';
 import TogglePasswordButton from './TogglePasswordButton';
 
 interface SignUpProps {
-    onSignUpSuccess: () => void;
     onBackToLogin: () => void;
 }
 interface CustomerFormData {
@@ -18,7 +18,8 @@ interface CustomerFormData {
     driversLicense: File | null;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
+const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
+    const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [confirmshowPassword, setConfirmShowPassword] = useState(false);
@@ -120,7 +121,8 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                 headers: { "Content-Type": "multipart/form-data" }
             }).then((response) => {
                 toast.success(response.data.message);
-                onSignUpSuccess();
+                // onSignUpSuccess();
+                onSignUpSuccessNew()
             }).catch((error) => {
                 const { data, message } = error.response.data; 
                 if (Array.isArray(data) && data.length > 0) {
@@ -150,11 +152,15 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
             }));
         }
     };
-
+    const onSignUpSuccessNew = () => {
+        navigate('/register-complete');
+    }
     return (
         <MobileContainer>
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
+            {/* <div className="min-h-screen flex items-center justify-center bg-gray-50"> */}
+            <div className="min-h-screen bg-white px-4 py-8">
+                {/* <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md"> */}
+                <div className="text-left mb-12">
                     {/* Car Icon */}
                     <div className="text-center">
                         <AppLogo isChangeHeight={true} />
@@ -166,7 +172,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                         <div className="space-y-4">
                             {/* Full Name */}
                             <div>
-                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="fullName" className="block text-[18px] text-gray-800">
                                     Full Name
                                 </label>
                                 <input
@@ -174,14 +180,14 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                     type="text"
                                     value={formData.fullName}
                                     onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                                 {errors.fullName && <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>}
                             </div>
 
                             {/* Email */}
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="email" className="block text-[18px] text-gray-800">
                                     Email
                                 </label>
                                 <input
@@ -189,14 +195,14 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                                 {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                             </div>
 
                             {/* Mobile */}
                             <div>
-                                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="mobile" className="block text-[18px] text-gray-800">
                                     Mobile
                                 </label>
                                 <input
@@ -204,14 +210,14 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                     type="tel"
                                     value={formData.mobile}
                                     onChange={(e) => setFormData(prev => ({ ...prev, mobile: e.target.value }))}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                                 {errors.mobile && <p className="mt-1 text-sm text-red-600">{errors.mobile}</p>}
                             </div>
 
                             {/* Password */}
                             <div className="relative">
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="password" className="block text-[18px] text-gray-800">
                                     Password
                                 </label>
                                 <input
@@ -219,7 +225,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                     type={showPassword ? "text" : "password"}
                                     value={formData.password}
                                     onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                                 {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
                                 <TogglePasswordButton
@@ -230,7 +236,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
 
                             {/* Confirm Password */}
                             <div className="relative">
-                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="confirmPassword" className="block text-[18px] text-gray-800">
                                     Confirm Password
                                 </label>
                                 <input
@@ -238,7 +244,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                     type={confirmshowPassword ? "text" : "password"}
                                     value={formData.confirmPassword}
                                     onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                                 {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>}
                                 <TogglePasswordButton
@@ -249,8 +255,8 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
 
                             {/* Drivers License Upload */}
                             <div>
-                                <label htmlFor="driversLicense" className="block text-sm font-medium text-gray-700">
-                                    Upload Drivers License
+                                <label htmlFor="driversLicense" className="block text-[18px] text-gray-800">
+                                    Upload profile image
                                 </label>
                                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                     <div className="space-y-1 text-center">
@@ -271,7 +277,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUpSuccess, onBackToLogin }) => {
                                         <div className="flex text-sm text-gray-600">
                                             <label
                                                 htmlFor="file-upload"
-                                                className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                                                className="relative cursor-pointer bg-white font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
                                             >
                                                 <span>Upload a file</span>
                                                 <input

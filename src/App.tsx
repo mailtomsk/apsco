@@ -22,6 +22,7 @@ import api from "./services/customer_api";
 import { toast } from "react-toastify";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from './pages/VerifyEmail';
+import RegisterComplete from './pages/RegisterComplete';
 
 type Step = 'login' | 'location' | 'appointment' | 'car-details' | 'service-type' | 'summary' | 'booking-history';
 
@@ -220,7 +221,7 @@ const App: React.FC = () => {
             return <ForgotPassword onBackToLogin={handleBackToLogin} />;
         }
         if (isSignUp) {
-            return <SignUp onSignUpSuccess={handleBackToLogin} onBackToLogin={handleBackToLogin} />;
+            return <SignUp onBackToLogin={handleBackToLogin} />;
         }
 
         if (showBookingHistory) {
@@ -343,6 +344,7 @@ const App: React.FC = () => {
                     <Route path="/admin/*" element={<Admin />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/verify-email/:token" element={<VerifyEmail />} />
+                    <Route path="/register-complete" element={<RegisterComplete />} />
                     {/* Main App Routes */}
                     <Route
                         path="/"

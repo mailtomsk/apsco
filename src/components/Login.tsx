@@ -87,7 +87,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="email" className="block text-[18px] text-gray-800">
                             Email
                         </label>
                         <input
@@ -95,13 +95,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                         {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                     </div>
 
                     <div className="relative">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="password" className="block text-[18px] text-gray-800">
                             Password
                         </label>
                         <input
@@ -109,7 +109,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 text-[16px] text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                         {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
                         <TogglePasswordButton
