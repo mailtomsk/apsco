@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MobileContainer from './MobileContainer';
 import { ArrowLeft } from 'lucide-react';
 import api from "../services/customer_api";
+import Header from './Header';
+import AppLogo from './AppLogo';
 
 interface Booking {
     id: string;
@@ -76,7 +78,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({ onBack }) => {
         <MobileContainer>
             <div className="min-h-screen bg-white">
                 {/* Header */}
-                <div className="bg-white shadow">
+                {/* <div className="bg-white">
                     <div className="px-4 py-6">
                         <div className="flex items-center">
                             <button
@@ -95,8 +97,25 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({ onBack }) => {
                             <h1 className="text-xl font-bold text-gray-900 ml-4">Booking History</h1>
                         </div>
                     </div>
+                </div> */}
+                <div className="text-center px-4 py-6">
+                    <AppLogo isChangeHeight={true} />
+                    <button
+                        onClick={() => {
+                            if (selectedBooking) {
+                                setSelectedBooking(null)
+                            } else {
+                                onBack()
+                            }
+                        }}
+                        className="text-gray-600 hover:text-gray-800 flex items-center"
+                    >
+                        <ArrowLeft className="w-5 h-5 mr-2" />
+                        Back
+                    </button>
+                    <h1 className="text-xl font-bold text-gray-900 ml-4">Booking History</h1>
                 </div>
-
+                
                 {/* Main Content */}
                 <div className="max-w-7xl mx-auto py-6 px-4">
                     {selectedBooking ? (
