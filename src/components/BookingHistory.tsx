@@ -162,7 +162,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
             </div>
             <div className="flex justify-center items-center mt-3">
               <h2 className="text-[20px] font-medium">
-                Book a Service Appointment
+                Booking History
               </h2>
             </div>
           </div>
@@ -292,7 +292,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                   onClick={() => setSelectedBooking(null)}
                   className="mt-6 w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
                 >
-                  Back to Bookings
+                  Back to My Bookings
                 </button>
               </div>
             </div>
