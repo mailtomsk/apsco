@@ -11,6 +11,12 @@ export interface ServiceCenter {
   working_saturday: string,
   working_sunday: string,
   status: 'active' | 'inactive';
+  working_weekdays_start?: string;
+  working_weekdays_end?: string;
+  working_saturday_start?: string;
+  working_saturday_end?: string;
+  working_sunday_start?: string;
+  working_sunday_end?: string;
 }
 
 const defaultImage = '/images/service-centers/kl-sentral.jpg';
