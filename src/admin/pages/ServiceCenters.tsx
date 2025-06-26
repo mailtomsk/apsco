@@ -8,6 +8,9 @@ import Pagination from '../components/Pagination';
 import { useSidebar } from "../context/SidebarContext";
 import EditIcon from "../../assets/icons/edit";
 import DeleteIcon from "../../assets/icons/delete";
+import WeekendTimeSelector from '../components/WeekendTimeSelector';
+import SaturdayTimeSelector from '../components/SaturdayTimeSelector';
+import SundayTimeSelector from '../components/SundayTimeSelector';
 const perPage = import.meta.env.VITE_PAGINATION
 
 const ServiceCenters: React.FC = () => {
@@ -42,7 +45,13 @@ const ServiceCenters: React.FC = () => {
         working_sunday: '',
         state: '',
         area: '',
-        status: ''
+        status: '',
+        working_weekdays_start: '',
+        working_weekdays_end: '',
+        working_saturday_start:'',
+        working_saturday_end:'',
+        working_sunday_start:'',
+        working_sunday_end:'',
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [filterState, setFilterState] = useState('');
@@ -102,10 +111,6 @@ const ServiceCenters: React.FC = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredServiceCenters.slice(indexOfFirstItem, indexOfLastItem);
 
-    const visiblePages = 3;
-    const startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + visiblePages - 1);
-
     // Form Validation
     const validateForm = () => {
         let isValid = true;
@@ -120,7 +125,13 @@ const ServiceCenters: React.FC = () => {
             working_sunday: '',
             state: '',
             area: '',
-            status: ''
+            status: '',
+            working_weekdays_start: '',
+            working_weekdays_end: '',
+            working_saturday_start:'',
+            working_saturday_end:'',
+            working_sunday_start:'',
+            working_sunday_end:'',
         };
         // Full Name validation
         if (!newCenter.name?.trim()) {
@@ -143,21 +154,53 @@ const ServiceCenters: React.FC = () => {
             newErrors.thumbnail = 'Thumbnail image is required';
             isValid = false;
         }
-        if (!newCenter.working_weekdays?.trim()) {
-            newErrors.working_weekdays = 'Working Weekdays is required';
+        
+        if (!newCenter.working_weekdays_start?.trim()) {
+            newErrors.working_weekdays_start = 'Weekdays Start time is required';
             isValid = false;
         }
-        if (!newCenter.working_saturday?.trim()) {
-            newErrors.working_saturday = 'Working Saturday is required';
+        if (!newCenter.working_weekdays_end) {
+            newErrors.working_weekdays_end = 'Weekdays End time is required';
             isValid = false;
         }
-        if (!newCenter.working_sunday?.trim()) {
+
+        if (!newCenter.working_saturday_start?.trim()) {
+            newErrors.working_saturday_start = 'Saturday Start time is required';
+            isValid = false;
+        }
+
+        if (!newCenter.working_saturday_end) {
+            newErrors.working_saturday_end = 'Saturday End time is required';
+            isValid = false;
+        }
+
+        /* if (!newCenter.working_sunday?.trim()) {
             newErrors.working_sunday = 'Working Sunday is required';
             isValid = false;
+        } */
+
+        if (newCenter.working_sunday !== 'Closed') {
+            if (!newCenter.working_sunday_start?.trim()) {
+                newErrors.working_sunday_start = 'Sunday Start time is required';
+                isValid = false;
+            }
+
+            if (!newCenter.working_sunday_end) {
+                newErrors.working_sunday_end = 'Sunday End time is required';
+                isValid = false;
+            }
         }
+        
         setErrors(newErrors);
         return isValid;
     }
+
+    const getLabelFromValue = (value: string): string => {
+        const hour = parseInt(value);
+        const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+        const period = hour < 12 ? 'AM' : 'PM';
+        return `${hour12}:00 ${period}`;
+    };
 
     const handleAddCenter = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -171,8 +214,22 @@ const ServiceCenters: React.FC = () => {
             formData.append('total_reviews', (newCenter.total_reviews || 0).toString());
             formData.append('working_weekdays', newCenter.working_weekdays || '');
             formData.append('working_saturday', newCenter.working_saturday || '');
-            formData.append('working_sunday', newCenter.working_sunday || '');
+            //formData.append('working_sunday', newCenter.working_sunday || '');
             formData.append('status', newCenter.status || 'active');
+            formData.append('working_weekdays_start', newCenter.working_weekdays_start || '');
+            formData.append('working_weekdays_end', newCenter.working_weekdays_end || '');
+            formData.append('working_saturday_start', newCenter.working_saturday_start || '');
+            formData.append('working_saturday_end', newCenter.working_saturday_end || '');
+            /* formData.append('working_sunday_start', newCenter.working_sunday_start || '');
+            formData.append('working_sunday_end', newCenter.working_sunday_end || ''); */
+            if (newCenter.working_sunday !== 'Closed') {
+                const startLabel = getLabelFromValue(newCenter.working_sunday_start || '');
+                const endLabel = getLabelFromValue(newCenter.working_sunday_end || '');
+                const combined = `${startLabel} - ${endLabel}`;
+                formData.append('working_sunday', combined);
+            } else {
+                formData.append('working_sunday', 'Closed');
+            }
             if (selectedFile) {
                 formData.append('thumbnail', selectedFile);
             } else {
@@ -214,8 +271,22 @@ const ServiceCenters: React.FC = () => {
             formData.append('total_reviews', (newCenter.total_reviews || 0).toString());
             formData.append('working_weekdays', newCenter.working_weekdays || '');
             formData.append('working_saturday', newCenter.working_saturday || '');
-            formData.append('working_sunday', newCenter.working_sunday || '');
+            //formData.append('working_sunday', newCenter.working_sunday || '');
             formData.append('status', newCenter.status || 'active');
+            formData.append('working_weekdays_start', newCenter.working_weekdays_start || '');
+            formData.append('working_weekdays_end', newCenter.working_weekdays_end || '');
+            formData.append('working_saturday_start', newCenter.working_saturday_start || '');
+            formData.append('working_saturday_end', newCenter.working_saturday_end || '');
+            /* formData.append('working_sunday_start', newCenter.working_sunday_start || '');
+            formData.append('working_sunday_end', newCenter.working_sunday_end || ''); */
+            if (newCenter.working_sunday !== 'Closed') {
+                const startLabel = getLabelFromValue(newCenter.working_sunday_start || '');
+                const endLabel = getLabelFromValue(newCenter.working_sunday_end || '');
+                const combined = `${startLabel} - ${endLabel}`;
+                formData.append('working_sunday', combined);
+            } else {
+                formData.append('working_sunday', 'Closed');
+            }
             if (selectedFile) {
                 formData.append('thumbnail', selectedFile);
             } else {
@@ -234,10 +305,10 @@ const ServiceCenters: React.FC = () => {
             }).catch((error) => {
                 toast.error(error.message)
             })
+        } else {
+            toast.error('Please check the form')
         }
-        setShowForm(false);
-        setSelectedCenter(null);
-        resetForm();
+        // setSelectedCenter(null);
     };
 
     const handleDeleteCenter = (id: string) => {
@@ -285,12 +356,6 @@ const ServiceCenters: React.FC = () => {
         }
     };
 
-    const getStatusBadgeClass = (status: string) => {
-        return status === 'active'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800';
-    };
-
     const resetForm = () => {
         setNewCenter({
             name: '',
@@ -316,7 +381,13 @@ const ServiceCenters: React.FC = () => {
             working_sunday: '',
             state: '',
             area: '',
-            status: ''
+            status: '',
+            working_weekdays_start: '',
+            working_weekdays_end: '',
+            working_saturday_start: '',
+            working_saturday_end: '',
+            working_sunday_start:'',
+            working_sunday_end:'',
         });
         setSelectedState('')
     };
@@ -336,7 +407,7 @@ const ServiceCenters: React.FC = () => {
         }
     }, [selectedState, areas]);
 
-    const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+    const { isExpanded, isHovered } = useSidebar();
 
     return (
         <div className="p-6">
@@ -654,39 +725,48 @@ const ServiceCenters: React.FC = () => {
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Working Hours</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-xs text-gray-500">Weekdays</label>
-                                        <input
-                                            type="text"
-                                            value={newCenter.working_weekdays}
-                                            onChange={(e) => setNewCenter({ ...newCenter, working_weekdays: e.target.value })}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="e.g. 8:00 AM - 6:00 PM"
-                                        />
-                                        {errors.working_weekdays && <p className="mt-1 text-sm text-red-600">{errors.working_weekdays}</p>}
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs text-gray-500">Saturday</label>
-                                        <input
-                                            type="text"
-                                            value={newCenter.working_saturday}
-                                            onChange={(e) => setNewCenter({ ...newCenter, working_saturday: e.target.value })}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="e.g. 9:00 AM - 3:00 PM"
-                                        />
-                                        {errors.working_saturday && <p className="mt-1 text-sm text-red-600">{errors.working_saturday}</p>}
-                                    </div>
+                                    <WeekendTimeSelector newCenter={newCenter} setNewCenter={setNewCenter} errors={errors} />
+                                    <SaturdayTimeSelector newCenter={newCenter} setNewCenter={setNewCenter} errors={errors} />
+                                    
                                     <div>
                                         <label className="block text-xs text-gray-500">Sunday</label>
-                                        <input
-                                            type="text"
-                                            value={newCenter.working_sunday}
-                                            onChange={(e) => setNewCenter({ ...newCenter, working_sunday: e.target.value })}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="e.g. Closed"
-                                        />
-                                        {errors.working_sunday && <p className="mt-1 text-sm text-red-600">{errors.working_sunday}</p>}
+                                        <div className="mt-1 flex gap-6">
+                                            <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                name="working_sunday"
+                                                value="Open"
+                                                checked={newCenter.working_sunday !== 'Closed'}
+                                                onChange={(e) =>
+                                                setNewCenter({ ...newCenter, working_sunday: e.target.value })
+                                                }
+                                                className="form-radio text-blue-600"
+                                            />
+                                            <span className="ml-2">Open</span>
+                                            </label>
+                                            <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                name="working_sunday"
+                                                value="Closed"
+                                                checked={newCenter.working_sunday === 'Closed'}
+                                                onChange={(e) =>
+                                                setNewCenter({ ...newCenter, working_sunday: e.target.value })
+                                                }
+                                                className="form-radio text-blue-600"
+                                            />
+                                            <span className="ml-2">Closed</span>
+                                            </label>
+                                        </div>
+
+                                        {errors.working_sunday && (
+                                            <p className="mt-1 text-sm text-red-600">{errors.working_sunday}</p>
+                                        )}
+                                        {newCenter.working_sunday !== 'Closed' && (
+                                        <SundayTimeSelector newCenter={newCenter} setNewCenter={setNewCenter} errors={errors} />
+                                        )}
                                     </div>
+                                    
                                 </div>
                             </div>
                             <div className="col-span-2">
