@@ -11,6 +11,7 @@ const persistConfig: any = {
     whitelist: ["customerAuth", "adminAuth", "booking"], // Only persist the auth slice
     serialize: true,
     deserialize: true,
+    version: 2
 };
 
 
