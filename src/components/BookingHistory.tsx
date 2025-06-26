@@ -108,7 +108,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                     onBack();
                   }
                 }}
-                className="flex items-center text-blue-500 col-span-2 justify-self-center"
+                className="flex items-center text-gray-600 col-span-2 justify-self-center"
               >
                 <svg
                   className="w-5 h-5 mr-1"
