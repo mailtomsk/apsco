@@ -63,7 +63,7 @@ const App: React.FC = () => {
     const [showLoginAtSummary, setShowLoginAtSummary] = useState(false);
     const [pendingBooking, setPendingBooking] = useState(false);
     
-    const currentStep = useAppSelector((state) => state.auth.booking.step as Step);
+    let currentStep = useAppSelector((state) => state.auth.booking.step as Step);
     const isLoggedIn = useAppSelector((state) => state.auth.customerAuth?.isLoggedIn);
     const { selectedState, selectedArea, selectedCenter } = useAppSelector((state) => state.auth.booking);
     const { appointmentDate, appointmentTime } = useAppSelector((state) => state.auth.booking);
@@ -75,7 +75,7 @@ const App: React.FC = () => {
         if (token && userId) {
             dispatch(restoreCustomerSession());
         }
-    }, [dispatch, token, userId]);
+    }, [dispatch, token, userId, currentStep]);
 
     useEffect(() => {
         if (pendingBooking && isLoggedIn) {
@@ -100,6 +100,7 @@ const App: React.FC = () => {
         dispatch(setServiceDetails({ serviceDetails: null }));
         dispatch(logoutCustomer());
         dispatch(setStep('location'));
+        setShowBookingHistory(false);
         setError(null);
     };
 
