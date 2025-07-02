@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import LocationStep from './components/LocationStep';
 import AppointmentBooking from './components/AppointmentBooking';
@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
     const [isSignUp, setIsSignUp] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
-    const [showBookingHistory, setShowBookingHistory] = useState(false);
+    let [showBookingHistory, setShowBookingHistory] = useState(false);
     const [showLoginAtSummary, setShowLoginAtSummary] = useState(false);
     const [pendingBooking, setPendingBooking] = useState(false);
     
@@ -70,7 +70,7 @@ const App: React.FC = () => {
     const { carDetails } = useAppSelector((state) => state.auth.booking);
     const { serviceDetails } = useAppSelector((state) => state.auth.booking);
     const dispatch = useAppDispatch();
-    const [loginDone, setLoginDone] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (token && userId) {
@@ -238,7 +238,7 @@ const App: React.FC = () => {
         if (isSignUp) {
             return <SignUp onBackToLogin={handleBackToLogin} onLoginSuccess={handleLoginSuccess}/>;
         }
-        if (showBookingHistory || loginDone) {
+        if (showBookingHistory) {
             return <BookingHistory onBack={handleBackFromBookingHistory} onLogout={handleLogout}
             onViewBookingHistory={handleViewBookingHistory}/>;
         }
@@ -365,38 +365,43 @@ const App: React.FC = () => {
 
     return (
         <>
-            <Router>
-                <Routes>
-                    {/* Admin Routes */}
-                    <Route path="/admin/*" element={<Admin />} />
-                    <Route path="/reset-password/:token" element={<ResetPassword />} />
-                    <Route path="/verify-email/:token" element={<VerifyEmail />} />
-                    <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
-                    {/* Main App Routes */}
-                    <Route
-                        path="/"
-                        element={
-                            <div className="min-h-screen bg-white">
-                                {renderStep()}
-                                {showConfirmation && bookingReference && (
-                                    <BookingConfirmation
-                                        bookingReference={bookingReference}
-                                        appointmentDate={appointmentDate!}
-                                        appointmentTime={appointmentTime!}
-                                        onClose={() => {
-                                            setShowConfirmation(false);
-                                            setBookingReference(null);
-                                            dispatch(resetBooking());
-                                            setShowBookingHistory(true);
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        }
-                    />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </Router>
+            <Routes>
+                {/* Admin Routes */}
+                <Route path="/admin/*" element={<Admin />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/verify-email/:token" element={<VerifyEmail />} />
+                <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
+                <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
+                    setShowConfirmation(false);
+                    setBookingReference(null);
+                    dispatch(resetBooking());
+                    setShowBookingHistory(true);
+                    navigate('/')
+                }}/>} />
+                {/* Main App Routes */}
+                <Route
+                    path="/"
+                    element={
+                        <div className="min-h-screen bg-white">
+                            {renderStep()}
+                            {showConfirmation && bookingReference && (
+                                <BookingConfirmation
+                                    bookingReference={bookingReference}
+                                    appointmentDate={appointmentDate!}
+                                    appointmentTime={appointmentTime!}
+                                    onClose={() => {
+                                        setShowConfirmation(false);
+                                        setBookingReference(null);
+                                        dispatch(resetBooking());
+                                        setShowBookingHistory(true);
+                                    }}
+                                />
+                            )}
+                        </div>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
             <ToastContainer
                 position="bottom-center"
                 autoClose={1000}
