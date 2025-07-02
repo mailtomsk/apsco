@@ -10,9 +10,10 @@ interface LoginProps {
     onLoginSuccess: () => void;
     onSignUpClick: () => void;
     onForgotPasswordClick: () => void;
+    onDone: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick }) => {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick, onDone }) => {
     const dispatch = useAppDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -57,7 +58,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
             await dispatch(customerLogin({ email, password, rememberMe })).then((response) => {
                 if (response.payload.status) {
                     onLoginSuccess();
-                    toast.success(response.payload.message)
+                    //toast.success(response.payload.message)
+                    onDone();
                 } else {
                     toast.error(response.payload.message)
                 }

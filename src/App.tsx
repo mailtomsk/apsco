@@ -51,7 +51,7 @@ interface AppState {
 
 const App: React.FC = () => {
     const token = localStorage.getItem('customer_token');
-    const userId = localStorage.getItem('customer_id');
+    let userId = localStorage.getItem('customer_id');
 
     const [error, setError] = useState<string | null>(null);
     const [bookingReference, setBookingReference] = useState<string | null>(null);
@@ -70,6 +70,7 @@ const App: React.FC = () => {
     const { carDetails } = useAppSelector((state) => state.auth.booking);
     const { serviceDetails } = useAppSelector((state) => state.auth.booking);
     const dispatch = useAppDispatch();
+    const [loginDone, setLoginDone] = useState(false);
 
     useEffect(() => {
         if (token && userId) {
@@ -162,21 +163,26 @@ const App: React.FC = () => {
     };
 
     const handleConfirmBooking = (skipLoginCheck = false) => {
+        
         if (!isLoggedIn && !skipLoginCheck) {
             setShowLoginAtSummary(true);
             setPendingBooking(true);
             return;
-        }
-        try {
-            const newBookingRef = 'BK' + Math.random().toString(36).substring(2, 10).toUpperCase();
-            setBookingReference(newBookingRef);
-            setShowConfirmation(true);
-        } catch (err) {
-            setError('Failed to confirm booking');
-        }
+        } 
+        setShowConfirmation(true);
     };
 
+    const handleLoginConfirmBooking = async () => {
+        setShowConfirmation(true);
+        await handleConfirmationDone();
+    }
+
     const handleConfirmationDone = async () => {
+        if(!userId) {
+            userId = localStorage.getItem("customer_id");
+        }
+        const newBookingRef = 'BK' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        setBookingReference((prev) => prev !== newBookingRef ? newBookingRef: '');
         const datas = {
             customer_id: userId,
             choose_state: selectedState?.name,
@@ -191,14 +197,14 @@ const App: React.FC = () => {
             services: serviceDetails?.selectedServices,
             remark: serviceDetails?.remarks,
             packageType:serviceDetails?.packageType,
-            reference_no: bookingReference
+            reference_no: newBookingRef
         }
         await api.post(`/customer/booking`, datas).then((response) => {
             toast.success(response.data.message)
-            setShowConfirmation(false);
-            setBookingReference(null);
-            dispatch(resetBooking());
-            setShowBookingHistory(true);
+            //setShowConfirmation(false);
+            //setBookingReference(null);
+            //dispatch(resetBooking());
+            //setShowBookingHistory(true);
         }).catch((error: any) => {
             setShowConfirmation(true);
         })
@@ -230,16 +236,16 @@ const App: React.FC = () => {
             return <ForgotPassword onBackToLogin={handleBackToLogin} />;
         }
         if (isSignUp) {
-            return <SignUp onBackToLogin={handleBackToLogin} />;
+            return <SignUp onBackToLogin={handleBackToLogin} onLoginSuccess={handleLoginSuccess}/>;
         }
-        if (showBookingHistory) {
+        if (showBookingHistory || loginDone) {
             return <BookingHistory onBack={handleBackFromBookingHistory} onLogout={handleLogout}
             onViewBookingHistory={handleViewBookingHistory}/>;
         }
         try {
             switch (currentStep) {
                 case 'login':
-                    return <Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} />;
+                    return <Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={handleConfirmationDone}/>;
                 case 'location':
                     return <LocationStep
                         key={Date.now()}
@@ -299,7 +305,13 @@ const App: React.FC = () => {
                         <>
                             <Summary
                                 onBack={() => dispatch(setStep('service-type'))}
-                                onConfirm={() => handleConfirmBooking(false)}
+                                onConfirm={() => {
+                                    if(!isLoggedIn) {
+                                        handleConfirmBooking(false)
+                                    } else {
+                                        handleLoginConfirmBooking()
+                                    }
+                                }}
                                 onLogout={handleLogout}
                                 onViewBookingHistory={handleViewBookingHistory}
                                 bookingDetails={{
@@ -326,6 +338,7 @@ const App: React.FC = () => {
                                             onLoginSuccess={handleLoginSuccess}
                                             onForgotPasswordClick={handleForgotPasswordClick}
                                             onSignUpClick={handleSignUpClick}
+                                            onDone={handleConfirmationDone}
                                         />
                                         <button className="mt-4 text-blue-500" onClick={() => setShowLoginAtSummary(false)}>Cancel</button>
                                     </div>
@@ -358,7 +371,7 @@ const App: React.FC = () => {
                     <Route path="/admin/*" element={<Admin />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/verify-email/:token" element={<VerifyEmail />} />
-                    <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin}/>} />
+                    <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
                     {/* Main App Routes */}
                     <Route
                         path="/"
@@ -370,7 +383,12 @@ const App: React.FC = () => {
                                         bookingReference={bookingReference}
                                         appointmentDate={appointmentDate!}
                                         appointmentTime={appointmentTime!}
-                                        onDone={handleConfirmationDone}
+                                        onClose={() => {
+                                            setShowConfirmation(false);
+                                            setBookingReference(null);
+                                            dispatch(resetBooking());
+                                            setShowBookingHistory(true);
+                                        }}
                                     />
                                 )}
                             </div>
