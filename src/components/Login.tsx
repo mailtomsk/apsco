@@ -10,7 +10,7 @@ interface LoginProps {
     onLoginSuccess: () => void;
     onSignUpClick: () => void;
     onForgotPasswordClick: () => void;
-    onDone: () => void;
+    onDone?: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick, onDone }) => {
@@ -59,7 +59,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
                 if (response.payload.status) {
                     onLoginSuccess();
                     //toast.success(response.payload.message)
-                    onDone();
+                    onDone?.();
                 } else {
                     toast.error(response.payload.message)
                 }
