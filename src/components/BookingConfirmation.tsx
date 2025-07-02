@@ -4,15 +4,15 @@ import MobileContainer from './MobileContainer';
 interface BookingConfirmationProps {
     bookingReference: string;
     appointmentDate: string;
-    appointmentTime: string
-    onDone: () => void;
+    appointmentTime: string;
+    onClose: () => void;
 }
 
 const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
     bookingReference,
     appointmentDate,
     appointmentTime,
-    onDone
+    onClose
 }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -59,10 +59,10 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
 
                 {/* Done Button */}
                 <button
-                    onClick={onDone}
+                    onClick={onClose}
                     className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium"
                 >
-                    Done
+                    Close
                 </button>
             </div>
         </div>

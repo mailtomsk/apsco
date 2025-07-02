@@ -5,9 +5,13 @@ import api from "../services/customer_api";
 import { toast } from "react-toastify";
 import AppLogo from './AppLogo';
 import TogglePasswordButton from './TogglePasswordButton';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { useDispatch } from 'react-redux';
+import { customerLogin } from '../auth/customerAuthSlice';
 
 interface SignUpProps {
     onBackToLogin: () => void;
+    onLoginSuccess: () => void;
 }
 interface CustomerFormData {
     fullName: string,
@@ -18,7 +22,7 @@ interface CustomerFormData {
     driversLicense: File | null;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
+const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess }) => {
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showPassword, setShowPassword] = useState(false);
@@ -39,6 +43,11 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
         confirmPassword: '',
         driversLicense: ''
     });
+    const { selectedState, selectedArea, selectedCenter } = useAppSelector((state) => state.auth.booking);
+    const { appointmentDate, appointmentTime } = useAppSelector((state) => state.auth.booking);
+    const { carDetails } = useAppSelector((state) => state.auth.booking);
+    const { serviceDetails } = useAppSelector((state) => state.auth.booking);
+    const dispatch = useAppDispatch()
 
     const validateForm = () => {
         let isValid = true;
@@ -117,12 +126,52 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
             } else {
                 alert("No file selected for driver's license.");
             }
+            const newBookingRef = 'BK' + Math.random().toString(36).substring(2, 10).toUpperCase();
+            const datas = {
+                choose_state: selectedState?.name,
+                choose_city: selectedArea?.name,
+                center_id: selectedCenter?.id,
+                appointment_date: appointmentDate,
+                appointment_time: appointmentTime,
+                car_brand: carDetails?.brand,
+                car_model: carDetails?.model,
+                manufacturing_year: carDetails?.year,
+                car_number: carDetails?.plateNumber,
+                services: serviceDetails?.selectedServices,
+                remark: serviceDetails?.remarks,
+                packageType:serviceDetails?.packageType,
+                reference_no: newBookingRef
+            }
+
+            fileFormData.append("choose_state", datas.choose_state ?? "");
+            fileFormData.append("choose_city", datas.choose_city ?? "");
+            fileFormData.append("center_id", datas.center_id?.toString() ?? "");
+            fileFormData.append("appointment_date", datas.appointment_date ?? "");
+            fileFormData.append("appointment_time", datas.appointment_time ?? "");
+            fileFormData.append("car_brand", datas.car_brand ?? "");
+            fileFormData.append("car_model", datas.car_model ?? "");
+            fileFormData.append("manufacturing_year", datas.manufacturing_year ?? "");
+            fileFormData.append("car_number", datas.car_number ?? "");
+            fileFormData.append("services", (datas.services ?? []).join(","));
+            fileFormData.append("remark", datas.remark ?? "");
+            fileFormData.append("packageType", datas.packageType ?? "");
+            fileFormData.append("reference_no", datas.reference_no ?? "");
+
             await api.post(`/customer/register`, fileFormData, {
                 headers: { "Content-Type": "multipart/form-data" }
-            }).then((response) => {
+            }).then(async (response) => {
                 toast.success(response.data.message);
-                // onSignUpSuccess();
-                onSignUpSuccessNew()
+                await dispatch(customerLogin({ email: formData.email, password: formData.password, rememberMe: false })).then((response) => {
+                    if (response.payload.status) {
+                        onLoginSuccess();
+                        onBackToLogin();
+                        navigate('/register-complete')
+                    } else {
+                        toast.error(response.payload.message)
+                    }
+                }).catch((error: any) => {
+                    toast.error(error.response.payload.message)
+                })
             }).catch((error) => {
                 const { data, message } = error.response.data; 
                 if (Array.isArray(data) && data.length > 0) {
