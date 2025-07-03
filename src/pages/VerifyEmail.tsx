@@ -4,18 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/customer_api';
 import { toast } from 'react-toastify';
 import AppLogo from '../components/AppLogo';
+import { useAppDispatch } from '../hooks';
+import { resetBooking } from '../auth/bookingSlice';
 
 const VerifyEmail = () => {
     const { token } = useParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+    const dispatch = useAppDispatch()
 
     const verifyEmail = async () => {       
         try {
             const response = await api.post('/customer/verify-email', { token });
             toast.success(response.data.message || "Email verified successfully");
             setStatus('success');
-            setTimeout(() => navigate('/'), 3000)
+            setTimeout(() => {
+                dispatch(resetBooking())
+                navigate('/login')
+            }, 3000)
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Verification failed");
             setStatus('error');
