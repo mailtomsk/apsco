@@ -231,6 +231,17 @@ const App: React.FC = () => {
         setShowBookingHistory(false);
     };
 
+    const handleLogin = () => {
+        navigate('/login');
+    }
+    console.log(currentStep);
+    const handleViewLocation = () => {
+        console.log("Redirecting to appointment...");
+        //dispatch(setStep('location'));
+        setShowBookingHistory(false);
+        dispatch(setStep('location'));
+    }
+
     const renderStep = () => {
         if (showForgotPassword) {
             return <ForgotPassword onBackToLogin={handleBackToLogin} />;
@@ -240,7 +251,7 @@ const App: React.FC = () => {
         }
         if (showBookingHistory) {
             return <BookingHistory onBack={handleBackFromBookingHistory} onLogout={handleLogout}
-            onViewBookingHistory={handleViewBookingHistory}/>;
+            onViewBookingHistory={handleViewBookingHistory} onViewLocation={handleViewLocation}/>;
         }
         try {
             switch (currentStep) {
@@ -254,6 +265,9 @@ const App: React.FC = () => {
                         onViewBookingHistory={handleViewBookingHistory}
                         bookingState={selectedState}
                         bookingArea={selectedArea}
+                        onLogin={handleLogin}
+                        onViewLocation={handleViewLocation}
+                        currentStep={currentStep}
                     />;
                 case 'appointment':
                     if (!selectedCenter) {
@@ -269,6 +283,8 @@ const App: React.FC = () => {
                             onViewBookingHistory={handleViewBookingHistory}
                             bookingDate={appointmentDate}
                             bookingTime={appointmentTime}
+                            onLogin={handleLogin}
+                            onViewLocation={handleViewLocation}
                         />
                     );
                 case 'car-details':
@@ -282,6 +298,8 @@ const App: React.FC = () => {
                             bookingCarModel={carDetails?.model || ''}
                             bookingCarYear={carDetails?.year || ' '}
                             bookingCarNumber={carDetails?.plateNumber || ''}
+                            onLogin={handleLogin}
+                            onViewLocation={handleViewLocation}
                         />
                     );
                 case 'service-type':
@@ -294,6 +312,8 @@ const App: React.FC = () => {
                             serviceStateDetails={serviceDetails?.selectedServices || []}
                             serviceRemark={serviceDetails?.remarks || '' }
                             servicePackage={serviceDetails?.packageType || 'A' }
+                            onLogin={handleLogin}
+                            onViewLocation={handleViewLocation}
                         />
                     );
                 case 'summary':
@@ -330,6 +350,8 @@ const App: React.FC = () => {
                                         time: appointmentTime
                                     }
                                 }}
+                                onLogin={handleLogin}
+                                onViewLocation={handleViewLocation}
                             />
                             {showLoginAtSummary && (
                                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

@@ -13,6 +13,9 @@ interface LocationStepProps {
     onViewBookingHistory: () => void;
     bookingState: any;
     bookingArea: any;
+    onLogin: () => void;
+    onViewLocation: () => void;
+    currentStep?: string;
 }
 
 const LocationStep: React.FC<LocationStepProps> = ({
@@ -20,7 +23,10 @@ const LocationStep: React.FC<LocationStepProps> = ({
     onLogout,
     onViewBookingHistory,
     bookingState,
-    bookingArea
+    bookingArea,
+    onLogin,
+    onViewLocation,
+    currentStep
 }) => {
     const [states, setStates] = useState<State[]>([]);
     const [areas, setAreas] = useState<Area[]>([]);
@@ -70,7 +76,7 @@ const LocationStep: React.FC<LocationStepProps> = ({
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white">
-                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} hideBack={true}/>
+                <Header currentStep={currentStep} onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} hideBack={true} onLogin={onLogin} onViewLocation={onViewLocation}/>
 
                 <div className="p-4 flex flex-col h-full w-full max-w-[420px] mx-auto">
                     {/* State Selection */}

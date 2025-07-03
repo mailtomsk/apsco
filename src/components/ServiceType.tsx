@@ -20,6 +20,8 @@ interface ServiceTypeProps {
     serviceStateDetails: any;
     serviceRemark: any,
     servicePackage: string,
+    onLogin: () => void;
+    onViewLocation: () => void;
 }
 interface Service {
     id: number;
@@ -33,7 +35,9 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     onViewBookingHistory,
     serviceStateDetails,
     serviceRemark,
-    servicePackage
+    servicePackage,
+    onLogin,
+    onViewLocation,
 }) => {
     const [selectedServices, setSelectedServices] = useState<string[]>(serviceStateDetails || []);
     const [remarks, setRemarks] = useState(serviceRemark || '');
@@ -77,7 +81,7 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white">
-                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack}/>
+                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} onLogin={onLogin} onViewLocation={onViewLocation} />
                 <div className="flex flex-col h-full w-full max-w-[420px] mx-auto">
                     <StepProgress/>
 

@@ -29,6 +29,8 @@ interface SummaryProps {
             time: string | null;
         };
     };
+    onLogin: () => void;
+    onViewLocation: () => void;
 }
 
 const Summary: React.FC<SummaryProps> = ({
@@ -36,7 +38,9 @@ const Summary: React.FC<SummaryProps> = ({
     onConfirm,
     onLogout,
     onViewBookingHistory,
-    bookingDetails
+    bookingDetails,
+    onLogin,
+    onViewLocation
 }) => {
     const dispatch = useAppDispatch();
     const currentSteps = (currentStepString: string) => {
@@ -47,7 +51,7 @@ const Summary: React.FC<SummaryProps> = ({
             <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="py-3">
-                    <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack}/>
+                    <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} onLogin={onLogin} onViewLocation={onViewLocation} />
                 </div>
 
                 {/* Progress Steps */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, History, Menu } from 'lucide-react';
+import { LogOut, History, Menu, Plus } from 'lucide-react';
 import AppLogo from './AppLogo';
 import { useAppSelector } from '../hooks';
 
@@ -8,10 +8,13 @@ interface HeaderProps {
   onBack?: () => void;
   onLogout: () => void;
   onViewBookingHistory: () => void;
-  hideBack?: boolean
+  onLogin: () => void;
+  hideBack?: boolean;
+  onViewLocation: () => void;
+  currentStep?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack, hideBack = false }) => {
+const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack, onLogin, onViewLocation, currentStep, hideBack = false }) => {
   const [showMenu, setShowMenu] = useState(false);
   const isAuthenticated = useAppSelector((state) => state.auth.customerAuth.isLoggedIn);
   const toggleMenu = () => {
@@ -41,35 +44,56 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack,
           
           <AppLogo isChangeHeight={true} isCenterAlign={false}/>
           <div className="relative col-span-2 justify-self-center mx-auto">
-            {isAuthenticated && (
+              {(currentStep === "location" || isAuthenticated) && (
               <button
                 onClick={toggleMenu}
                 className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none">
                 <Menu className="w-6 h-6 text-gray-600" />
               </button>
-            )}
+              )}
+            
             {showMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <button
-                  onClick={() => {
-                    onViewBookingHistory();
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                >
-                  <History className="w-4 h-4 mr-2" />
-                  Booking History
-                </button>
-                <button
-                  onClick={() => {
-                    onLogout();
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </button>
+                {isAuthenticated ? (
+                  <>
+                  
+                  <button
+                    onClick={() => {
+                      onViewBookingHistory();
+                      setShowMenu(false);
+                    }}
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <History className="w-4 h-4 mr-2" />
+                    Booking History
+                  </button>
+                  <button
+                    onClick={() => {
+                      onLogout();
+                      setShowMenu(false);
+                    }}
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </button>
+                </>
+                ) : (
+                  <>
+                  {currentStep === "location" && (
+                  <button 
+                    onClick={() => {
+                      onLogin();
+                      setShowMenu(false);
+                    }}
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    <LogOut className="w-4 h-4 mr-2 rotate-180" />
+                    Login
+                  </button>
+                  )}
+                  </>
+                )}
               </div>
             )}
           </div>

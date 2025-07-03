@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MobileContainer from "./MobileContainer";
-import { ArrowLeft, History, LogOut, Menu } from "lucide-react";
+import { ArrowLeft, History, LogOut, Menu, Plus } from "lucide-react";
 import api from "../services/customer_api";
 import Header from "./Header";
 import AppLogo from "./AppLogo";
@@ -26,12 +26,14 @@ interface BookingHistoryProps {
   onBack: () => void;
   onLogout: () => void;
   onViewBookingHistory: () => void;
+  onViewLocation: () => void;
 }
 
 const BookingHistory: React.FC<BookingHistoryProps> = ({
   onBack,
   onLogout,
   onViewBookingHistory,
+  onViewLocation,
 }) => {
   const userId = localStorage.getItem("customer_id");
   const [history, setHistory] = useState<Booking[]>([]);
@@ -136,6 +138,16 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                    <button
+                  onClick={() => {
+                    onViewLocation();
+                    setShowMenu(false);
+                  }}
+                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  <Plus className="w-4 h-4 mr-2"/>
+                  New Booking
+                </button>
                     <button
                       onClick={() => {
                         onViewBookingHistory();

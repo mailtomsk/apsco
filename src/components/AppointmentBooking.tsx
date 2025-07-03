@@ -14,6 +14,8 @@ interface AppointmentBookingProps {
     onViewBookingHistory: () => void;
     bookingDate: any
     bookingTime: any
+    onLogin: () => void;
+    onViewLocation: () => void;
 }
 
 const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
@@ -23,7 +25,9 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
     onLogout,
     onViewBookingHistory,
     bookingDate,
-    bookingTime
+    bookingTime,
+    onLogin,
+    onViewLocation,
 }) => {
     const [selectedDate, setSelectedDate] = useState(bookingDate || '');
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(bookingTime || '');
@@ -181,7 +185,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white">
-                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack}/>
+                <Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} onLogin={onLogin} onViewLocation={onViewLocation}/>
                 <div className="flex flex-col h-full w-full max-w-[420px] mx-auto">
                     <StepProgress/>
 
