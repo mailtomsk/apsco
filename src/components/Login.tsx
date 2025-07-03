@@ -13,9 +13,11 @@ interface LoginProps {
     onForgotPasswordClick: () => void;
     onDone?: () => void;
     onBack?: () => void;
+    onSignUpPageClick?: () => void;
+    onForgotPasswordPageClick?: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick, onDone, onBack }) => {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick, onDone, onBack, onSignUpPageClick, onForgotPasswordPageClick }) => {
     const dispatch = useAppDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -161,9 +163,16 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
                             </label>
                         </div>
                         <div className="text-sm">
+                            
                             <button
                                 type="button"
-                                onClick={onForgotPasswordClick}
+                                onClick={() => {
+                                    if (onForgotPasswordPageClick) {
+                                    onForgotPasswordPageClick();
+                                    } else {
+                                    onForgotPasswordClick();
+                                    }
+                                }}
                                 className="font-medium text-blue-600 hover:text-blue-500"
                             >
                                 Forgot password?
@@ -184,7 +193,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
                         <span className="text-gray-600">Don't have an account? </span>
                         <button
                             type="button"
-                            onClick={onSignUpClick}
+                            onClick={() => {
+                                if (onSignUpPageClick) {
+                                onSignUpPageClick();
+                                } else {
+                                onSignUpClick();
+                                }
+                            }}
                             className="font-medium text-blue-600 hover:text-blue-500"
                         >
                             Sign up

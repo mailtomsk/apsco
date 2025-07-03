@@ -5,9 +5,10 @@ import api from "../services/customer_api";
 
 interface ForgotPasswordProps {
     onBackToLogin: () => void;
+    onLoginPage?: () => void;
 }
 
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onBackToLogin }) => {
+const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onBackToLogin, onLoginPage }) => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
@@ -83,7 +84,13 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onBackToLogin }) => {
                     <div className="text-center">
                         <button
                             type="button"
-                            onClick={onBackToLogin}
+                                onClick={() => {
+                                    if (onLoginPage) {
+                                        onLoginPage();
+                                    } else {
+                                        onBackToLogin();
+                                    }
+                                }}
                             className="text-sm font-medium text-blue-600 hover:text-blue-500"
                         >
                             Back to login

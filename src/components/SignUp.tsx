@@ -14,6 +14,7 @@ import SampleProfilePopup from './SampleProfilePopup';
 interface SignUpProps {
     onBackToLogin: () => void;
     onLoginSuccess: () => void;
+    onLoginPage?: () => void;
 }
 interface CustomerFormData {
     fullName: string,
@@ -24,7 +25,7 @@ interface CustomerFormData {
     driversLicense: File | null;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess }) => {
+const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess, onLoginPage }) => {
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showPassword, setShowPassword] = useState(false);
@@ -360,7 +361,13 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess }) => {
                             <span className="text-gray-600">Already have an account? </span>
                             <button
                                 type="button"
-                                onClick={onBackToLogin}
+                                onClick={() => {
+                                    if (onLoginPage) {
+                                        onLoginPage();
+                                    } else {
+                                        onBackToLogin();
+                                    }
+                                }}
                                 className="font-medium text-blue-600 hover:text-blue-500"
                             >
                                 Sign in
