@@ -22,6 +22,8 @@ interface CarDetailsProps {
 	bookingCarModel: any;
 	bookingCarYear: any;
 	bookingCarNumber: any;
+	onLogin: () => void;
+	onViewLocation: () => void;
 }
 
 const CarDetails: React.FC<CarDetailsProps> = ({
@@ -32,7 +34,9 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 	bookingCarBrand,
 	bookingCarModel,
 	bookingCarYear,
-	bookingCarNumber
+	bookingCarNumber,
+    onLogin,
+	onViewLocation,
 }) => {
 	const [carBrands, setCarBrands] = useState<carBrand[]>([]);
 	const [carModels, setCarModels] = useState<carModel[]>([]);
@@ -92,7 +96,7 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 	return (
 		<MobileContainer>
 			<div className="min-h-screen bg-white">
-				<Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} />
+				<Header onLogout={onLogout} onViewBookingHistory={onViewBookingHistory} onBack={onBack} onLogin={onLogin} onViewLocation={onViewLocation} />
 				<div className="flex flex-col h-full w-full max-w-[420px] mx-auto">
 					{/* Progress Steps */}
 					<StepProgress/>
