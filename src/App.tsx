@@ -244,6 +244,14 @@ const App: React.FC = () => {
         navigate('/');
     }
 
+    const handleForgotPasswordPageClick = () => {
+        navigate('/forgot-paasword');
+    }
+
+    const handleSignUpPageClick = () => {
+        navigate('/signup');
+    }
+
     const renderStep = () => {
         if (showForgotPassword) {
             return <ForgotPassword onBackToLogin={handleBackToLogin} />;
@@ -395,13 +403,15 @@ const App: React.FC = () => {
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/verify-email/:token" element={<VerifyEmail />} />
                 <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
-                <Route path='/login' element={<Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
+                <Route path='/login' element={<Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onSignUpPageClick={handleSignUpPageClick} onForgotPasswordPageClick={handleForgotPasswordPageClick} onDone={() => {
                     setShowConfirmation(false);
                     setBookingReference(null);
                     dispatch(resetBooking());
                     setShowBookingHistory(true);
                     navigate('/')
                 }}/>} />
+                <Route path="/forgot-paasword" element={<ForgotPassword onLoginPage={handleLogin} onBackToLogin={handleBackToLogin} />} />
+                <Route path="/signup" element={<SignUp onLoginPage={handleLogin} onBackToLogin={handleBackToLogin} onLoginSuccess={handleLoginSuccess}/>} />
                 {/* Main App Routes */}
                 <Route
                     path="/"
