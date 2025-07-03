@@ -234,12 +234,14 @@ const App: React.FC = () => {
     const handleLogin = () => {
         navigate('/login');
     }
-    console.log(currentStep);
+    
     const handleViewLocation = () => {
-        console.log("Redirecting to appointment...");
-        //dispatch(setStep('location'));
         setShowBookingHistory(false);
         dispatch(setStep('location'));
+    }
+
+    const handleBackToLocation = () => {
+        navigate('/');
     }
 
     const renderStep = () => {
@@ -393,7 +395,7 @@ const App: React.FC = () => {
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/verify-email/:token" element={<VerifyEmail />} />
                 <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
-                <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
+                <Route path='/login' element={<Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
                     setShowConfirmation(false);
                     setBookingReference(null);
                     dispatch(resetBooking());
