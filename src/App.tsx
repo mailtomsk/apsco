@@ -258,7 +258,7 @@ const App: React.FC = () => {
         try {
             switch (currentStep) {
                 case 'login':
-                    return <Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={handleConfirmationDone}/>;
+                    return <Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={handleConfirmationDone}/>;
                 case 'location':
                     return <LocationStep
                         key={Date.now()}
@@ -359,7 +359,6 @@ const App: React.FC = () => {
                                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                                         <Login
-                                            onBack={handleBackToLocation}
                                             onLoginSuccess={handleLoginSuccess}
                                             onForgotPasswordClick={handleForgotPasswordClick}
                                             onSignUpClick={handleSignUpClick}

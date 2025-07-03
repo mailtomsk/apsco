@@ -12,7 +12,7 @@ interface LoginProps {
     onSignUpClick: () => void;
     onForgotPasswordClick: () => void;
     onDone?: () => void;
-    onBack: () => void;
+    onBack?: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPasswordClick, onDone, onBack }) => {
@@ -70,9 +70,6 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
             })
         }
     };
-    const location = useLocation();
-    const currentPath = location.pathname;
-    const isLoginPage = currentPath === "/login";
 
     useEffect(() => {
         const stored = localStorage.getItem('rememberMe');
@@ -85,7 +82,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
     return (
         <MobileContainer>
             <div className="min-h-screen bg-white px-4 py-8">
-                {isLoginPage && (
+                {onBack && (
                 <button
                 onClick={() => {
                     console.log("Back clicked");
