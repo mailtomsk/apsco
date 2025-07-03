@@ -234,12 +234,14 @@ const App: React.FC = () => {
     const handleLogin = () => {
         navigate('/login');
     }
-    console.log(currentStep);
+    
     const handleViewLocation = () => {
-        console.log("Redirecting to appointment...");
-        //dispatch(setStep('location'));
         setShowBookingHistory(false);
         dispatch(setStep('location'));
+    }
+
+    const handleBackToLocation = () => {
+        navigate('/');
     }
 
     const renderStep = () => {
@@ -256,7 +258,7 @@ const App: React.FC = () => {
         try {
             switch (currentStep) {
                 case 'login':
-                    return <Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={handleConfirmationDone}/>;
+                    return <Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={handleConfirmationDone}/>;
                 case 'location':
                     return <LocationStep
                         key={Date.now()}
@@ -357,6 +359,7 @@ const App: React.FC = () => {
                                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                                         <Login
+                                            onBack={handleBackToLocation}
                                             onLoginSuccess={handleLoginSuccess}
                                             onForgotPasswordClick={handleForgotPasswordClick}
                                             onSignUpClick={handleSignUpClick}
@@ -393,7 +396,7 @@ const App: React.FC = () => {
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/verify-email/:token" element={<VerifyEmail />} />
                 <Route path="/register-complete" element={<RegisterComplete handleBackToLogin={handleBackToLogin} onViewBookingHistory={handleViewBookingHistory}/>} />
-                <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
+                <Route path='/login' element={<Login onBack={handleBackToLocation} onLoginSuccess={handleLoginSuccess} onSignUpClick={handleSignUpClick} onForgotPasswordClick={handleForgotPasswordClick} onDone={() => {
                     setShowConfirmation(false);
                     setBookingReference(null);
                     dispatch(resetBooking());

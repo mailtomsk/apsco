@@ -10,11 +10,10 @@ interface HeaderProps {
   onViewBookingHistory: () => void;
   onLogin: () => void;
   hideBack?: boolean;
-  onViewLocation: () => void;
   currentStep?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack, onLogin, onViewLocation, currentStep, hideBack = false }) => {
+const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack, onLogin, currentStep, hideBack = false }) => {
   const [showMenu, setShowMenu] = useState(false);
   const isAuthenticated = useAppSelector((state) => state.auth.customerAuth.isLoggedIn);
   const toggleMenu = () => {
