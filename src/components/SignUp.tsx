@@ -161,17 +161,8 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess }) => {
                 headers: { "Content-Type": "multipart/form-data" }
             }).then(async (response) => {
                 toast.success(response.data.message);
-                await dispatch(customerLogin({ email: formData.email, password: formData.password, rememberMe: false })).then((response) => {
-                    if (response.payload.status) {
-                        onLoginSuccess();
-                        onBackToLogin();
-                        navigate('/register-complete')
-                    } else {
-                        toast.error(response.payload.message)
-                    }
-                }).catch((error: any) => {
-                    toast.error(error.response.payload.message)
-                })
+                onBackToLogin();
+                navigate('/register-complete')
             }).catch((error) => {
                 const { data, message } = error.response.data; 
                 if (Array.isArray(data) && data.length > 0) {
