@@ -8,6 +8,8 @@ import TogglePasswordButton from './TogglePasswordButton';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { customerLogin } from '../auth/customerAuthSlice';
+import { Image } from 'lucide-react';
+import SampleProfilePopup from './SampleProfilePopup';
 
 interface SignUpProps {
     onBackToLogin: () => void;
@@ -293,10 +295,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess }) => {
                                 />
                             </div>
 
+                            
+
                             {/* Drivers License Upload */}
-                            <div>
-                                <label htmlFor="driversLicense" className="block text-[18px] text-gray-800">
-                                    Upload Lalamove profile image
+                            <div className=''>
+                                <label htmlFor="driversLicense" className="text-[18px] text-gray-800 inline-flex">
+                                    Upload Lalamove profile image <SampleProfilePopup/>
                                 </label>
                                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                     <div className="space-y-1 text-center">
