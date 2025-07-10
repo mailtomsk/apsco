@@ -21,6 +21,7 @@ interface Customer {
     totalBookings: number;
     lastBooking: string;
     joinDate: string;
+    drivers_license: string;
 }
 
 const Customers: React.FC = () => {
@@ -31,6 +32,7 @@ const Customers: React.FC = () => {
     const [plateFilter, setPlateFilter] = useState('');
     const [showDetails, setShowDetails] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
     
     const filteredCustomers = customers.filter(customer => {
         const matchesName = customer.name.toLowerCase().includes(nameFilter.toLowerCase());
@@ -283,7 +285,7 @@ const Customers: React.FC = () => {
                                                 <td colSpan={6} className="px-6 py-4 bg-gray-50">
                                                     <div className="text-sm">
                                                         <h3 className="font-medium text-gray-900 mb-2">Customer Details</h3>
-                                                        <div className="grid grid-cols-2 gap-4">
+                                                        <div className="grid grid-cols-3 gap-4">
                                                             <div>
                                                                 <p className="text-gray-600">Customer ID: {customer.id}</p>
                                                                 <p className="text-gray-600">Join Date: {customer.joinDate}</p>
@@ -300,6 +302,38 @@ const Customers: React.FC = () => {
                                                                     </div>
                                                                 ))}
                                                             </div>
+                                                            <div>
+                                                                <img
+                                                                    className="h-32 w-32 rounded-lg cursor-pointer shadow-md"
+                                                                    src={customer.drivers_license}
+                                                                    alt={customer.name}
+                                                                    onClick={() => setShowModal(true)}
+                                                                />
+                                                            </div>
+
+                                                            {showModal && (
+                                                                <div
+                                                                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                                                                    onClick={() => setShowModal(false)}
+                                                                >
+                                                                    <div
+                                                                        className="bg-white p-4 rounded shadow-lg"
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                    >
+                                                                        <img
+                                                                            src={customer.drivers_license}
+                                                                            alt="Driver's License"
+                                                                            className="max-w-full max-h-[60vh] object-contain"
+                                                                        />
+                                                                        <button
+                                                                            className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                                                            onClick={() => setShowModal(false)}
+                                                                        >
+                                                                            Close
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </td>

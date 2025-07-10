@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../../services/adminService';
 import Pagination from '../components/Pagination';
 import adminClient from "../../services/adminClient";
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 const perPage = import.meta.env.VITE_PAGINATION
 
 
@@ -12,7 +12,10 @@ interface Booking {
     bookingDate: string;
     bookingTime: string;
     customerName: string;
+    customerMobile: string;
     serviceCenterName: string;
+    serviceCenterState: string;
+    serviceCenterArea: string;
     vehicleDetails: {
         model: string;
         plateNumber: string;
@@ -25,17 +28,22 @@ interface Booking {
 interface Services {
     name: string
 }
+// interface Area {
+//     name: string
+// }
 const Bookings: React.FC = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [services, setServices] = useState<Services[]>([]);
+    // const [area, setArea] = useState<Area[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [serviceTypeFilter, setServiceTypeFilter] = useState('all');
     const [serviceCenterFilter, setServiceCenterFilter] = useState('all');
+    const [areaFilter, setAreaFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [selected, setSelected] = useState('');
+    // const [selected, setSelected] = useState('');
     const options = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
 
     const [activeTab, setActiveTab] = useState<'Pending' | 'Completed'>('Pending');
@@ -47,6 +55,9 @@ const Bookings: React.FC = () => {
     
    // Get unique service centers for filter
     const serviceCenters = Array.from(new Set(bookings.map(booking => booking.serviceCenterName)));
+    const serviceCentersAreas = React.useMemo(() => {
+        return Array.from(new Set(bookings.map(booking => booking.serviceCenterArea)));
+    }, [bookings]);
 
     // Filter bookings based on all criteria
     const filteredBookings = bookings.filter(booking => {
@@ -59,8 +70,9 @@ const Bookings: React.FC = () => {
         const matchesStatus = statusFilter === 'all' || booking.status === statusFilter;
         const matchesServiceType = serviceTypeFilter === 'all' || booking.serviceType === serviceTypeFilter;
         const matchesServiceCenter = serviceCenterFilter === 'all' || booking.serviceCenterName === serviceCenterFilter;
+        const matchesArea = areaFilter === 'all' || booking.serviceCenterArea === areaFilter;    
 
-        return matchesSearch && matchesDate && matchesStatus && matchesServiceType && matchesServiceCenter;
+        return matchesSearch && matchesDate && matchesStatus && matchesServiceType && matchesServiceCenter && matchesArea;
     });
     const itemsPerPage = perPage;
     const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
@@ -68,9 +80,9 @@ const Bookings: React.FC = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
-    const visiblePages = 3;
-    const startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + visiblePages - 1);
+    // const visiblePages = 3;
+    // const startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+    // const endPage = Math.min(totalPages, startPage + visiblePages - 1);
     const fetchServices = async () => {
         await adminClient.get('/v1/services').then((response) => {
             const { success, data } = response.data;
@@ -81,6 +93,16 @@ const Bookings: React.FC = () => {
             console.error(error);
         })
     }
+    // const fetchAreas = async () => {
+    //     await adminClient.get('/v1/areas').then((response) => {
+    //         const { success, data } = response.data;
+    //         if (success) {
+    //             setArea(data);
+    //         }
+    //     }).catch((error: any) => {
+    //         console.error(error);
+    //     })
+    // }
     const getBooking = async (activeTab: string) => {
         await getAllBookings(activeTab).then((response) => {
             const {success, data} = response;
@@ -91,38 +113,38 @@ const Bookings: React.FC = () => {
             console.error(error);
         })
     }
-    const updateStatus = async (id: string, value: string) => {       
-        if (confirm('Do you want update the status?')) {
-            await adminClient.post(`/v1/bookings/status-update`, { id: parseInt(id), status: value }).then((response) => {
-                const { success, message } = response.data;
-                if (success) {
-                    getBooking(activeTab)
-                    toast.success(message)
-                }
-            }).catch((error: any) => {
-                toast.error(error.message);
-            })
-        }
-    }
+    // const updateStatus = async (id: string, value: string) => {       
+    //     if (confirm('Do you want update the status?')) {
+    //         await adminClient.post(`/v1/bookings/status-update`, { id: parseInt(id), status: value }).then((response) => {
+    //             const { success, message } = response.data;
+    //             if (success) {
+    //                 getBooking(activeTab)
+    //                 toast.success(message)
+    //             }
+    //         }).catch((error: any) => {
+    //             toast.error(error.message);
+    //         })
+    //     }
+    // }
     useEffect(() => {
         getBooking(activeTab);
         fetchServices();
-    }, [activeTab]);
+    }, [activeTab, serviceTypeFilter, serviceCenterFilter, areaFilter]);
 
-    const getStatusBadgeClass = (status: string) => {
-        switch (status) {
-            case 'Completed':
-                return 'bg-green-100 text-green-800';
-            case 'Pending':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'Confirmed':
-                return 'bg-blue-100 text-blue-800';
-            case 'Cancelled':
-                return 'bg-red-100 text-red-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
+    // const getStatusBadgeClass = (status: string) => {
+    //     switch (status) {
+    //         case 'Completed':
+    //             return 'bg-green-100 text-green-800';
+    //         case 'Pending':
+    //             return 'bg-yellow-100 text-yellow-800';
+    //         case 'Confirmed':
+    //             return 'bg-blue-100 text-blue-800';
+    //         case 'Cancelled':
+    //             return 'bg-red-100 text-red-800';
+    //         default:
+    //             return 'bg-gray-100 text-gray-800';
+    //     }
+    // };
 
     return (
         <div className="p-6">
@@ -191,6 +213,20 @@ const Bookings: React.FC = () => {
                                 <option value="all">All Service Centers</option>
                                 {serviceCenters.map(center => (
                                     <option key={center} value={center}>{center}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Service Type Filter */}
+                        <div>
+                            <select
+                                value={areaFilter}
+                                onChange={(e) => setAreaFilter(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="all">All Area</option>
+                                {serviceCentersAreas && serviceCentersAreas.map(val => (
+                                    <option key={val} value={val}>{val}</option>
                                 ))}
                             </select>
                         </div>
@@ -272,11 +308,15 @@ const Bookings: React.FC = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm font-medium text-gray-900">{booking.customerName}</div>
                                             <div className="text-sm text-gray-500">
+                                                {booking.customerMobile}<br/>
                                                 {booking.vehicleDetails.model} - {booking.vehicleDetails.plateNumber}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900">{booking.serviceCenterName}</div>
+                                            <div className="text-sm text-gray-500">
+                                                {booking.serviceCenterState} - {booking.serviceCenterArea}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="text-sm text-gray-900">{booking.serviceType}</div>
