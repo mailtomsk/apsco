@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../../services/adminService';
 import Pagination from '../components/Pagination';
 import adminClient from "../../services/adminClient";
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 const perPage = import.meta.env.VITE_PAGINATION
-
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver'
 
 interface Booking {
     id: string;
@@ -145,12 +146,44 @@ const Bookings: React.FC = () => {
     //             return 'bg-gray-100 text-gray-800';
     //     }
     // };
-
+    const downloadCSV = () => {
+        if (filteredBookings.length === 0) {
+            toast.error('No data found!');
+            return false;
+        }
+        const csvData = filteredBookings.map((booking) => ({
+            ReferenceNo: booking.reference_no,
+            BookingDate: booking.bookingDate,
+            BookingTime: booking.bookingTime,
+            CustomerName: booking.customerName,
+            CustomerMobile: booking.customerMobile,
+            VehicleModel: booking.vehicleDetails.model,
+            PlateNumber: booking.vehicleDetails.plateNumber,
+            ServiceCenterName: booking.serviceCenterName,
+            ServiceCenterState: booking.serviceCenterState,
+            ServiceCenterArea: booking.serviceCenterArea,
+            ServiceType: booking.serviceType,
+            PackageType: booking.packageType || '',
+            Status: booking.status,
+            Notes: booking.notes || ''
+        }));
+        const worksheet = XLSX.utils.json_to_sheet(csvData);
+        const csv = XLSX.utils.sheet_to_csv(worksheet);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        saveAs(blob, `bookings_${new Date().toISOString().slice(0, 10)}.csv`);
+    };
     return (
         <div className="p-6">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-4">Manage Bookings</h1>
-
+                <div className="flex justify-between mb-4">
+                    <h1 className="text-2xl font-bold text-gray-800 mb-4">Manage Bookings</h1>
+                    <button
+                        onClick={downloadCSV}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
+                    >
+                        Export CSV
+                    </button>
+                </div>
                 {/* Filters Section */}
                 <div className="bg-white p-4 rounded-lg shadow mb-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
@@ -176,7 +209,7 @@ const Bookings: React.FC = () => {
                         </div>
 
                         {/* Status Filter */}
-                        <div>
+                        {/* <div>
                             <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -187,7 +220,7 @@ const Bookings: React.FC = () => {
                                     <option key={val} value={val} >{val}</option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
 
                         {/* Service Type Filter */}
                         <div>
@@ -315,7 +348,7 @@ const Bookings: React.FC = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900">{booking.serviceCenterName}</div>
                                             <div className="text-sm text-gray-500">
-                                                {booking.serviceCenterState} - {booking.serviceCenterArea}
+                                                {booking.serviceCenterArea} - {booking.serviceCenterState}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
