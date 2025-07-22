@@ -4,6 +4,7 @@ import { ArrowLeft, History, LogOut, Menu, Plus } from "lucide-react";
 import api from "../services/customer_api";
 import Header from "./Header";
 import AppLogo from "./AppLogo";
+import { string } from "yup";
 
 interface Booking {
   id: string;
@@ -11,7 +12,10 @@ interface Booking {
   time: string;
   serviceCenter: {
     name: string;
-    address: string;
+    adress: string;
+    area: string;
+    state: string;
+    phone: string;
   };
   vehicle: {
     model: string;
@@ -94,6 +98,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
     setShowMenu(!showMenu);
   };
 
+  console.log(selectedBooking);
   return (
     <MobileContainer>
       <div className="min-h-screen bg-white">
@@ -255,7 +260,16 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                       {selectedBooking.serviceCenter.name}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {selectedBooking.serviceCenter.address}
+                      {selectedBooking.serviceCenter.adress}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {selectedBooking.serviceCenter.area}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {selectedBooking.serviceCenter.state}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {selectedBooking.serviceCenter.phone}
                     </p>
                   </div>
 

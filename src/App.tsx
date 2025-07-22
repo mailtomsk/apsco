@@ -347,7 +347,11 @@ const App: React.FC = () => {
                                 bookingDetails={{
                                     serviceCenter: {
                                         name: selectedCenter.name,
-                                        address: selectedCenter.address
+                                        address: selectedCenter.address,
+                                        area: selectedCenter.area,
+                                        state: selectedCenter.state,
+                                        phone: selectedCenter.phone,
+                                        
                                     },
                                     vehicle: {
                                         model: `${carDetails.brand} ${carDetails.model}`,

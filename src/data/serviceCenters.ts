@@ -2,6 +2,7 @@ export interface ServiceCenter {
   id: string;
   name: string;
   address: string;
+  phone:string,
   state: string;
   area: string;
   thumbnail: string;
@@ -26,6 +27,7 @@ export const serviceCenters: ServiceCenter[] = [
     id: 'SC001',
     name: 'CarZone KLCC',
     address: '123 Jalan Sultan, Kuala Lumpur',
+    phone: '',
     state: 'Kuala Lumpur',
     area: 'City Center',
     thumbnail: defaultImage,
@@ -40,6 +42,7 @@ export const serviceCenters: ServiceCenter[] = [
     id: 'SC002',
     name: 'CarZone Bukit Bintang',
     address: '45 Jalan Bukit Bintang, Kuala Lumpur',
+    phone: '',
     state: 'Kuala Lumpur',
     area: 'Bukit Bintang',
     thumbnail: defaultImage,
@@ -54,6 +57,7 @@ export const serviceCenters: ServiceCenter[] = [
     id: 'SC003',
     name: 'CarZone KL Sentral',
     address: '78 Jalan Stesen Sentral, Kuala Lumpur',
+    phone: '',
     state: 'Kuala Lumpur',
     area: 'KL Sentral',
     thumbnail: defaultImage,

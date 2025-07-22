@@ -24,6 +24,7 @@ const ServiceCenters: React.FC = () => {
         id: '',
         name: '',
         address: '',
+        phone:'',
         thumbnail: '',
         rating: 0,
         total_reviews: 0,
@@ -37,6 +38,7 @@ const ServiceCenters: React.FC = () => {
     const [errors, setErrors] = useState({
         name: '',
         address: '',
+        phone:'',
         thumbnail: '',
         rating: 0,
         total_reviews: 0,
@@ -93,7 +95,8 @@ const ServiceCenters: React.FC = () => {
         const matchesSearch =
             center.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             center.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            center.area.toLowerCase().includes(searchTerm.toLowerCase());
+            center.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (center.phone || '').toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesState = !filterState || center.state === filterState;
         const matchesStatus = filterStatus === 'all' || center.status === filterStatus;
@@ -117,6 +120,7 @@ const ServiceCenters: React.FC = () => {
         const newErrors = {
             name: '',
             address: '',
+            phone:'',
             thumbnail: '',
             rating: 0,
             total_reviews: 0,
@@ -133,6 +137,7 @@ const ServiceCenters: React.FC = () => {
             working_sunday_start:'',
             working_sunday_end:'',
         };
+        const phoneNumber = newCenter.phone?.trim() || "";
         // Full Name validation
         if (!newCenter.name?.trim()) {
             newErrors.name = 'Full name is required';
@@ -148,6 +153,13 @@ const ServiceCenters: React.FC = () => {
         }
         if (!newCenter.area?.trim()) {
             newErrors.area = 'Area is required';
+            isValid = false;
+        }
+        if (!phoneNumber) {
+            newErrors.phone = 'Phone number is required';
+            isValid = false;
+        } else if (phoneNumber.length !== 10) {
+            newErrors.phone = 'Phone number must be 10 digits';
             isValid = false;
         }
         if (!newCenter.thumbnail?.trim()) {
@@ -208,6 +220,7 @@ const ServiceCenters: React.FC = () => {
             const formData = new FormData();
             formData.append('name', newCenter.name || '');
             formData.append('address', newCenter.address || '');
+            formData.append('phone', newCenter.phone || '');
             formData.append('state', newCenter.state || '');
             formData.append('area', newCenter.area || '');
             formData.append('rating', (newCenter.rating || 0).toString());
@@ -265,6 +278,7 @@ const ServiceCenters: React.FC = () => {
             const formData = new FormData();
             formData.append('name', newCenter.name || '');
             formData.append('address', newCenter.address || '');
+            formData.append('phone', newCenter.phone || '');
             formData.append('state', newCenter.state || '');
             formData.append('area', newCenter.area || '');
             formData.append('rating', (newCenter.rating || 0).toString());
@@ -360,6 +374,7 @@ const ServiceCenters: React.FC = () => {
         setNewCenter({
             name: '',
             address: '',
+            phone:'',
             state: '',
             area: '',
             thumbnail: '',
@@ -373,6 +388,7 @@ const ServiceCenters: React.FC = () => {
         setErrors({
             name: '',
             address: '',
+            phone:'',
             thumbnail: '',
             rating: 0,
             total_reviews: 0,
@@ -433,7 +449,7 @@ const ServiceCenters: React.FC = () => {
                         <div className="lg:col-span-2">
                             <input
                                 type="text"
-                                placeholder="Search by name, address, or area..."
+                                placeholder="Search by name, address, phone or area..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -501,6 +517,9 @@ const ServiceCenters: React.FC = () => {
                                 <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Service Center
                                 </th>
+                                 <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    Phone Number
+                                </th>
                                 <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                     Location
                                 </th>
@@ -533,6 +552,9 @@ const ServiceCenters: React.FC = () => {
                                                     <div className="text-sm text-gray-500">{center.address}</div>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{center.phone}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900">{center.state}</div>
@@ -672,6 +694,20 @@ const ServiceCenters: React.FC = () => {
                                     ))}
                                 </select>
                                 {errors.area && <p className="mt-1 text-sm text-red-600">{errors.area}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Phone</label>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value={newCenter.phone}
+                                    onChange={(e) => setNewCenter({ ...newCenter, phone: e.target.value })}
+                                    maxLength={10}
+                                    className="border px-3 py-2 rounded w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your phone number"
+                                />
+                                {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Thumbnail Image</label>
