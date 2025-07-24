@@ -197,7 +197,7 @@ const AppointmentStep: React.FC<AppointmentStepProps> = ({
             <div className="mb-6 p-3 bg-gray-50 rounded-lg">
               <h3 className="font-medium">{serviceCenter.name}</h3>
               <p className="text-sm text-gray-600 mt-1">{serviceCenter.address}</p>
-              <p className="text-sm text-gray-600">{serviceCenter.area}, {serviceCenter.state} {serviceCenter.postalCode}</p>
+              <p className="text-sm text-gray-600">{serviceCenter.area}, {serviceCenter.state} {serviceCenter.phone}</p>
             </div>
 
             {/* Date Selection */}

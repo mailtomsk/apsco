@@ -53,6 +53,9 @@ const ServiceCenterCard: React.FC<ServiceCenterCardProps> = ({ center, onClick }
       <div className="p-2">
         <h3 className="text-lg font-semibold text-gray-900">{center.name}</h3>
         <p className="mt-1 text-sm text-gray-600">{center.address}</p>
+        <p className="mt-1 text-sm text-gray-600">{center.area}</p>
+        <p className="mt-1 text-sm text-gray-600">{center.state}</p>
+        <p className="mt-1 text-sm text-gray-600">{center.phone}</p>
 
         {/* Rating */}
         <div className="mt-2">

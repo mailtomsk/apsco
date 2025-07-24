@@ -13,6 +13,9 @@ interface SummaryProps {
         serviceCenter: {
             name: string;
             address: string;
+            area: string;
+            state: string;
+            phone: string;
         };
         vehicle: {
             model: string;
@@ -105,6 +108,9 @@ const Summary: React.FC<SummaryProps> = ({
                                     <h3 className="text-[18px] text-gray-800">Service Center</h3>
                                     <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.name}</p>
                                     <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.address}</p>
+                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.area}</p>
+                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.state}</p>
+                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.phone}</p>
                                 </div>
                             </div>
                         </div>
