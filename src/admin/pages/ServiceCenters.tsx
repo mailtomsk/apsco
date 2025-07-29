@@ -158,8 +158,8 @@ const ServiceCenters: React.FC = () => {
         if (!phoneNumber) {
             newErrors.phone = 'Phone number is required';
             isValid = false;
-        } else if (phoneNumber.length !== 10) {
-            newErrors.phone = 'Phone number must be 10 digits';
+        } else if (phoneNumber.length !== 15) {
+            newErrors.phone = 'Phone number must be 15 digits';
             isValid = false;
         }
         if (!newCenter.thumbnail?.trim()) {
@@ -703,7 +703,7 @@ const ServiceCenters: React.FC = () => {
                                     name="phone"
                                     value={newCenter.phone}
                                     onChange={(e) => setNewCenter({ ...newCenter, phone: e.target.value })}
-                                    maxLength={10}
+                                    maxLength={15}
                                     className="border px-3 py-2 rounded w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Enter your phone number"
                                 />

@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack,
         initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
         statusMessage='Available' // Optional
         startChatText='Start chat with us' // Optional
-        tooltipText='Need help? Click to chat!' // Optional
+        tooltipText='' // Optional
         allowEsc={true} // Optional
         // Explore all available props below
       />
