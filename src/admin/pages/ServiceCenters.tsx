@@ -158,8 +158,8 @@ const ServiceCenters: React.FC = () => {
         if (!phoneNumber) {
             newErrors.phone = 'Phone number is required';
             isValid = false;
-        } else if (phoneNumber.length !== 15) {
-            newErrors.phone = 'Phone number must be 15 digits';
+        } else if (phoneNumber.length < 10 || phoneNumber.length > 15) {
+            newErrors.phone = 'Phone number must be between 10 and 15 digits';
             isValid = false;
         }
         if (!newCenter.thumbnail?.trim()) {
