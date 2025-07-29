@@ -89,6 +89,14 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
       day: "numeric",
     });
   };
+  const parseCustomDateTime = (dateStr: string, timeStr: string) => {
+    // timeStr example: "22/07/2025, 08:00"
+    const [datePart, timePart] = timeStr.split(", ");
+    const [day, month, year] = datePart.split("/").map(Number);
+    const [hours, minutes] = timePart.split(":").map(Number);
+
+    return new Date(year, month - 1, day, hours, minutes);
+  };
   useEffect(() => {
     fecthHistory();
   }, []);
@@ -98,7 +106,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
     setShowMenu(!showMenu);
   };
 
-  console.log(selectedBooking);
+  console.log(history);
   return (
     <MobileContainer>
       <div className="min-h-screen bg-white">
@@ -235,7 +243,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                     </h2>
                     <p className="mt-1 text-sm text-gray-500">
                       {formatDate(selectedBooking.date)} at{" "}
-                      {new Date(selectedBooking.time).toLocaleTimeString([], {
+                      {parseCustomDateTime(selectedBooking.date, selectedBooking.time).toLocaleTimeString("en-MY", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
@@ -347,7 +355,7 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
                           </h3>
                           <p className="mt-1 text-sm text-gray-500">
                             {formatDate(booking.date)} at{" "}
-                            {new Date(booking.time).toLocaleTimeString([], {
+                            {parseCustomDateTime(booking.date, booking.time).toLocaleTimeString("en-MY", {
                               hour: "2-digit",
                               minute: "2-digit",
                             })}

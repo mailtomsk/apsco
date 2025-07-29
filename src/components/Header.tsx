@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { LogOut, History, Menu, Plus } from 'lucide-react';
 import AppLogo from './AppLogo';
 import { useAppSelector } from '../hooks';
+import FloatingWhatsApp from './FloatingWhatsApp';
 
 
 interface HeaderProps {
@@ -21,6 +22,17 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack,
   };
 
   return (
+    <>
+    <FloatingWhatsApp
+                    phoneNumber="60109630963"
+                    accountName="Tisco Support"
+                    statusMessage="Typically replies within minutes"
+                    chatMessage="Hi there! 👋 How can we help you with Tisco today?"
+                    notification={true}
+                    notificationDelay={5000}
+                    notificationLoop={3}
+                />
+    
     <header className="bg-white">
       <div className="py-6">
         <div className="justify-center items-center grid grid-cols-12">
@@ -102,6 +114,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack,
         </div>
       </div>
     </header>
+    </>
   );
 };
 
