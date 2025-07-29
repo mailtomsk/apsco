@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { LogOut, History, Menu, Plus } from 'lucide-react';
 import AppLogo from './AppLogo';
 import { useAppSelector } from '../hooks';
-import FloatingWhatsApp from './FloatingWhatsApp';
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import AppWhatsApplogo from '../assets/logo.jpg';
 
 
 interface HeaderProps {
@@ -24,15 +25,17 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onViewBookingHistory, onBack,
   return (
     <>
     <FloatingWhatsApp
-                    phoneNumber="60109630963"
-                    accountName="Tisco Support"
-                    statusMessage="Typically replies within minutes"
-                    chatMessage="Hi there! 👋 How can we help you with Tisco today?"
-                    notification={true}
-                    notificationDelay={5000}
-                    notificationLoop={3}
-                />
-    
+        phoneNumber='60109630963' // Required
+        accountName='Apsco Malaysia' // Optional
+        avatar={AppWhatsApplogo} // Optional
+        initialMessageByServer='Hi there! How can I assist you?' // Optional
+        initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
+        statusMessage='Available' // Optional
+        startChatText='Start chat with us' // Optional
+        tooltipText='Need help? Click to chat!' // Optional
+        allowEsc={true} // Optional
+        // Explore all available props below
+      />
     <header className="bg-white">
       <div className="py-6">
         <div className="justify-center items-center grid grid-cols-12">
