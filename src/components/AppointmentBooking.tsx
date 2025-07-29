@@ -44,8 +44,8 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
 
     const formatDate = (date: Date | null) => {
         if (!date) return '';
-        const weekday = date.toLocaleDateString('en-US', { weekday: 'short' }); // Fri
-        const month = date.toLocaleDateString('en-US', { month: 'short' });     // Jul
+        const weekday = date.toLocaleDateString('en-MY', { weekday: 'short' }); // Fri
+        const month = date.toLocaleDateString('en-MY', { month: 'short' });     // Jul
         const day = date.getDate().toString().padStart(2, '0');                 // 18
         const year = date.getFullYear();         
         console.log(`${weekday}, ${month} ${day} ${year}`);                               // 2025
@@ -87,7 +87,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
                 date.setDate(today.getDate() + i);
                 days.push({
                     date: date.toISOString().split('T')[0],
-                    display: date.toLocaleDateString('en-US', {
+                    display: date.toLocaleDateString('en-MY', {
                         weekday: 'short',
                         month: 'short',
                         day: 'numeric'
@@ -101,17 +101,17 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
             return [];
         }
     }; */
-    const getNext30Days = () => {
+    /* const getNext30Days = () => {
         try {
             const days = [];
             const today = new Date();
 
-            for (let i = 0; i < 10; i++) { // Start from 0 to include today
+            for (let i = 0; i < 200; i++) { // Start from 0 to include today
                 const date = new Date(today);
                 date.setDate(today.getDate() + i);
                 days.push({
                     date: date.toISOString().split('T')[0],
-                    display: date.toLocaleDateString('en-US', {
+                    display: date.toLocaleDateString('en-MY', {
                         weekday: 'short',
                         month: 'short',
                         day: 'numeric'
@@ -124,12 +124,40 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({
             setError('Failed to generate available dates');
             return [];
         }
+    }; */
+    const getNextDaysForYears = (years: number) => {
+        try {
+            const days = [];
+            const today = new Date();
+            const endDate = new Date();
+            endDate.setFullYear(today.getFullYear() + years);
+
+            let currentDate = new Date(today);
+
+            while (currentDate <= endDate) {
+                days.push({
+                    date: currentDate.toISOString().split('T')[0],
+                    display: currentDate.toLocaleDateString('en-MY', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    })
+                });
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            return days;
+        } catch (err) {
+            console.error('Error generating dates:', err);
+            setError('Failed to generate available dates');
+            return [];
+        }
     };
     const dispatch = useAppDispatch();
     const currentSteps = (currentStepString: string) => {
         dispatch(setStep(currentStepString));
     };
-    const availableDates: string[] = getNext30Days().map(d => d.date);
+    const availableDates: string[] = getNextDaysForYears(10).map(d => d.date);
 
     const handleDateSelect = (date: string) => {
         try {
@@ -267,7 +295,8 @@ console.log("Generated slots:", timeSlots);
                             <div className="mb-6 bg-blue-50 border border-blue-500 py-3 px-4">
                                 <h3 className="text-[18px] text-gray-800">{serviceCenter.name}</h3>
                                 <p className="text-[15px] text-gray-600 mt-1">{serviceCenter.address}</p>
-                                <p className="text-[15px] text-gray-600">{serviceCenter.area}, {serviceCenter.state} {serviceCenter.phone }</p>
+                                <p className="text-[15px] text-gray-600">{serviceCenter.area}, {serviceCenter.state}</p>
+                                <p className="text-[15px] text-gray-600">{serviceCenter.phone }</p>
                             </div>
                             
                             {/* Date Selection */}
