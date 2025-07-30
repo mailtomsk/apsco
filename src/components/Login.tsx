@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import AppLogo from './AppLogo';
 import TogglePasswordButton from './TogglePasswordButton';
 import { useLocation } from "react-router-dom";
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import AppWhatsApplogo from '../assets/logo.jpg';
 
 interface LoginProps {
     onLoginSuccess: () => void;
@@ -83,6 +85,18 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onSignUpClick, onForgotPa
     }, [rememberMe]);
     return (
         <MobileContainer>
+            <FloatingWhatsApp
+                phoneNumber='60109630963' // Required
+                accountName='Apsco Malaysia' // Optional
+                avatar={AppWhatsApplogo} // Optional
+                initialMessageByServer='Hi there! How can I assist you?' // Optional
+                initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
+                statusMessage='Available' // Optional
+                startChatText='Start chat with us' // Optional
+                tooltipText='' // Optional
+                allowEsc={true} // Optional
+                // Explore all available props below
+            />
             <div className="min-h-screen bg-white px-4 py-6 relative">
                 {onBack && (
                     <button

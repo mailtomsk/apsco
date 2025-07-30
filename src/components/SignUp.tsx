@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { customerLogin } from '../auth/customerAuthSlice';
 import { Image } from 'lucide-react';
 import SampleProfilePopup from './SampleProfilePopup';
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import AppWhatsApplogo from '../assets/logo.jpg';
 
 interface SignUpProps {
     onBackToLogin: () => void;
@@ -200,6 +202,18 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin, onLoginSuccess, onLoginP
     }
     return (
         <MobileContainer>
+            <FloatingWhatsApp
+            phoneNumber='60109630963' // Required
+            accountName='Apsco Malaysia' // Optional
+            avatar={AppWhatsApplogo} // Optional
+            initialMessageByServer='Hi there! How can I assist you?' // Optional
+            initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
+            statusMessage='Available' // Optional
+            startChatText='Start chat with us' // Optional
+            tooltipText='' // Optional
+            allowEsc={true} // Optional
+            // Explore all available props below
+            />
             {/* <div className="min-h-screen flex items-center justify-center bg-gray-50"> */}
             <div className="min-h-screen bg-white px-4 py-8">
                 {/* <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md"> */}

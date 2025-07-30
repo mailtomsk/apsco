@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import MobileContainer from './MobileContainer';
 import AppLogo from './AppLogo';
 import api from "../services/customer_api";
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import AppWhatsApplogo from '../assets/logo.jpg';
 
 interface ForgotPasswordProps {
     onBackToLogin: () => void;
@@ -32,6 +34,18 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onBackToLogin, onLoginP
 
     return (
         <MobileContainer>
+            <FloatingWhatsApp
+                phoneNumber='60109630963' // Required
+                accountName='Apsco Malaysia' // Optional
+                avatar={AppWhatsApplogo} // Optional
+                initialMessageByServer='Hi there! How can I assist you?' // Optional
+                initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
+                statusMessage='Available' // Optional
+                startChatText='Start chat with us' // Optional
+                tooltipText='' // Optional
+                allowEsc={true} // Optional
+                // Explore all available props below
+            />
             <div className="min-h-screen bg-white px-4 py-8">
                 {/* Logo and Title */}
                 <div className="text-center mb-12">

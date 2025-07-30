@@ -5,6 +5,8 @@ import api from "../services/customer_api";
 import Header from "./Header";
 import AppLogo from "./AppLogo";
 import { string } from "yup";
+import { FloatingWhatsApp } from "@carlos8a/react-whatsapp-floating-button";
+import AppWhatsApplogo from '../assets/logo.jpg';
 
 interface Booking {
   id: string;
@@ -111,6 +113,18 @@ const BookingHistory: React.FC<BookingHistoryProps> = ({
     <MobileContainer>
       <div className="min-h-screen bg-white">
         {/* Header */}
+        <FloatingWhatsApp
+                phoneNumber='60109630963' // Required
+                accountName='Apsco Malaysia' // Optional
+                avatar={AppWhatsApplogo} // Optional
+                initialMessageByServer='Hi there! How can I assist you?' // Optional
+                initialMessageByClient='Hello! I found your contact on your website. I would like to chat with you about...' // Optional
+                statusMessage='Available' // Optional
+                startChatText='Start chat with us' // Optional
+                tooltipText='' // Optional
+                allowEsc={true} // Optional
+                // Explore all available props below
+              />
         <header className="bg-white">
           <div className="py-6">
             <div className="justify-center items-center grid grid-cols-12">
