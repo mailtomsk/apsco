@@ -110,7 +110,6 @@ const Summary: React.FC<SummaryProps> = ({
                                     <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.address}</p>
                                     <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.area}</p>
                                     <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.state}</p>
-                                    <p className="text-[16px] text-gray-600">{bookingDetails.serviceCenter.phone}</p>
                                 </div>
                             </div>
                         </div>
