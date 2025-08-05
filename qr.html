@@ -59,12 +59,11 @@
                     const startScanner = () => {
                         Html5Qrcode.getCameras().then(cameras => {
                             if (cameras.length > 0) {
-                                const selectedCameraId = cameras[1]?.id || cameras[0]
-                                    .id; // fallback to first camera if second not found
+                                const selectedCameraId = cameras[0]?.id || cameras[1].id; // fallback to first camera if second not found
                                 html5QrCode.start(
                                     selectedCameraId, {
                                     fps: 10,
-                                    qrbox: 200
+                                    qrbox: 400
                                 },
                                     onScanSuccess
                                 ).then(() => {
