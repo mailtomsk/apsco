@@ -8,7 +8,7 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    port: 1580,       // 👈 Your desired port number
+    port: 5686,       // 👈 Your desired port number
     strictPort: true  // 👈 Optional: Vite will fail if port is already in use
   }
 });
