@@ -52,17 +52,27 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 
 			if (userId) {
 				const bookingResponse = await api.get(`/customer/cardetails-booking-history?customer_id=${userId}`);
-				const customerCar = bookingResponse.data.data;
+				const customerBooking = bookingResponse.data.data;
 
-				if (customerCar && customerCar.car_brand && customerCar.car_model) {
-				const upperCaseCarNumber = customerCar.car_number?.toUpperCase() || '';
+				if (customerBooking && customerBooking.car_brand && customerBooking.car_model) {
+					const upperCaseCarNumber = customerBooking.car_number?.toUpperCase() || '';
 
-				// Set pre-filled values
-				setBrand(customerCar.car_brand);
-				setModel(customerCar.car_model);
-				setYear(customerCar.manufacturing_year);
-				setPlateNumber(upperCaseCarNumber);
-				}
+					// Set pre-filled values
+					setBrand(customerBooking.car_brand);
+					setModel(customerBooking.car_model);
+					setYear(customerBooking.manufacturing_year);
+					setPlateNumber(upperCaseCarNumber);
+				} 
+			} else {
+				await api.get('/customer/cardetails').then((response) => {
+					const data = response.data.data;
+					console.log("data", data);
+					setCarBrands(data.carBrand);
+					setCarModels(data.carModel);
+				}).catch((error: any) => {
+					setCarBrands([]);
+					setCarModels([]);
+				})
 			}
 
 			const carResponse = await api.get('/customer/cardetails');
