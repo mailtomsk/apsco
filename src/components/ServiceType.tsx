@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import MobileContainer from './MobileContainer';
 import Header from './Header';
 import PackageA from '../assets/package-a.png';
+import PackageB from '../assets/package-b.png';
+import PackageF from '../assets/package-f.png';
 import api from "../services/customer_api";
 import { toast } from 'react-toastify';
 import { setStep } from "../auth/bookingSlice";
@@ -75,6 +77,11 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
             });
         // }
     };
+    const packageImages: { [key: string]: string } = {
+        A: PackageA,
+        B: PackageB,
+        F: PackageF,
+    };
     useEffect(() => {
         fetchServices()
     }, [])
@@ -110,11 +117,32 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
                                 </button> */}
                                 <div className="mt-4 space-y-2">
                                     
-                                        <label key={'A'} className="flex items-center space-x-2">
-                                        <input type="radio" name="servicePackage" value={packageType} className="form-radio text-blue-600"  defaultChecked={packageType == 'A'}/>
-                                        <strong>Package A</strong>
-                                    </label>
-                                    <img src={PackageA} className='mx-auto'/> 
+                                        {/* <label key={'A'} className="flex items-center space-x-2">
+                                            <input type="radio" name="servicePackage" value={packageType} className="form-radio text-blue-600"  defaultChecked={packageType == 'A'}/>
+                                            <strong>Package A</strong>
+                                        </label>
+                                        <img src={PackageA} className='mx-auto'/> */} 
+                                        <div className="relative">
+                                            <h3 className="text-[18px] text-gray-800 mb-2">Select Package</h3>
+                                            <select
+                                                value={packageType}
+                                                onChange={(e) => setPackageType(e.target.value)}
+                                                className="block appearance-none w-full px-3 py-2 cursor-pointer bg-white border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
+                                            >
+                                                <option value="A">Package A</option>
+                                                <option value="B">Package B</option>
+                                                <option value="F">Package F</option>
+                                            </select>
+                                            <div className="pointer-events-none absolute top-[75%] right-3 transform -translate-y-1/2 text-gray-600">
+                                                <svg className="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M7 7l3 3 3-3" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <div className="text-center">
+                                            <img src={packageImages[packageType]} alt={`Package ${packageType}`} className="mx-auto max-w-full" />
+                                        </div>
                                 </div>
                             </div>
 

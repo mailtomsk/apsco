@@ -44,16 +44,59 @@ const CarDetails: React.FC<CarDetailsProps> = ({
 	const [model, setModel] = useState(bookingCarModel || '');
 	const [year, setYear] = useState(bookingCarYear || '');
 	const [plateNumber, setPlateNumber] = useState(bookingCarNumber || '');
+	const userId = localStorage.getItem("customer_id");
 	const dispatch = useAppDispatch();
 	const fetchCardetails = async () => {
-		await api.get('/customer/cardetails').then((response) => {
+
+		try {
+
+			if (userId) {
+				const bookingResponse = await api.get(`/customer/cardetails-booking-history?customer_id=${userId}`);
+				const customerBooking = bookingResponse.data.data;
+
+				if (customerBooking && customerBooking.car_brand && customerBooking.car_model) {
+					const upperCaseCarNumber = customerBooking.car_number?.toUpperCase() || '';
+
+					// Set pre-filled values
+					setBrand(customerBooking.car_brand);
+					setModel(customerBooking.car_model);
+					setYear(customerBooking.manufacturing_year);
+					setPlateNumber(upperCaseCarNumber);
+				} 
+			} else {
+				await api.get('/customer/cardetails').then((response) => {
+					const data = response.data.data;
+					console.log("data", data);
+					setCarBrands(data.carBrand);
+					setCarModels(data.carModel);
+				}).catch((error: any) => {
+					setCarBrands([]);
+					setCarModels([]);
+				})
+			}
+
+			const carResponse = await api.get('/customer/cardetails');
+			const carData = carResponse.data.data;
+
+			setCarBrands(carData.carBrand);
+			setCarModels(carData.carModel);
+
+
+		} catch (error) {
+			console.error("Error loading car details:", error);
+			setCarBrands([]);
+			setCarModels([]);
+		}
+		
+		/* await api.get('/customer/cardetails').then((response) => {
 			const data = response.data.data;
+			console.log("data", data);
 			setCarBrands(data.carBrand);
 			setCarModels(data.carModel);
 		}).catch((error: any) => {
 			setCarBrands([]);
 			setCarModels([]);
-		})
+		}) */
 	}
 	const filteredModel = useMemo(() => {	
 		if (!carBrands) return [];

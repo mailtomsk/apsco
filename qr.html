@@ -2,127 +2,198 @@
 <html lang="en" class="light-style layout-wide customizer-hide" dir="ltr">
 
 <head>
-    <base href="/">
-    <meta charset="utf-8" />
-    <meta name="viewport"
-        ontent="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Car Service Management</title>
-    <meta name="description" content="" />
-    <style>
-        .layout-wrapper.layout-content-navbar {
-            background-color: #1f2937 !important;
-        }
+  <base href="/" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Car Service Management - QR Scanner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .layout-wrapper.layout-content-navbar {
+      background-color: #1f2937 !important;
+    }
 
-        .text-blue-400 {
-            --tw-text-opacity: 1;
-            color: rgb(96 165 250 / var(--tw-text-opacity));
-        }
-    </style>
-    <script>
-        function site_url() {
-            return "https://tisco.oclocksoftware.info/api/";
-        }
-    </script>
+    #reader {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #gallery-qr-result {
+      margin-top: 1rem;
+      color: white;
+      word-break: break-word;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="content-wrapper">
-            <div class="container-xxl new-body flex-grow-1 container-p-y">
-                <div class="row mb-2">
-                    <div class="col-xl">
-                        <div id="reader" class=""></div>
-                        <div class="mb-2">
-                            <div class="text-center">
-                                <div class="mt-3  d-none " id="scan-again-wrapper">
-                                    <button type="button" class="btn btn-secondary" id="scan-again">Scan Again</button>
-                                </div>
-                                <form method="GET" action="https://tiscoapi.oclocksoftware.info/api/qr-verify"
-                                    id="asset-form" class="d-none">
-                                    <input type="hidden" name="bookingNumber" id="qr-result">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="content-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-6 text-center">
 
-                <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
-                <script>
-                    const qrRegionId = "reader";
-                    const reader = document.getElementById(qrRegionId);
-                    const scanAgainBtnWrapper = document.getElementById('scan-again-wrapper');
-                    const scanAgainBtn = document.getElementById('scan-again');
-                    const qrResultInput = document.getElementById('qr-result');
-                    const form = document.getElementById('asset-form');
-
-                    const html5QrCode = new Html5Qrcode(qrRegionId);
-                    const startScanner = () => {
-                        Html5Qrcode.getCameras().then(cameras => {
-                            if (cameras.length > 0) {
-                                const selectedCameraId = cameras[0]?.id || cameras[1].id; // fallback to first camera if second not found
-                                html5QrCode.start(
-                                    selectedCameraId, {
-                                    fps: 10,
-                                    qrbox: 400
-                                },
-                                    onScanSuccess
-                                ).then(() => {
-                                    // Smooth scroll to reader element
-                                    setTimeout(() => {
-                                        document.getElementById(qrRegionId).scrollIntoView({
-                                            behavior: 'smooth',
-                                            block: 'start'
-                                        });
-                                    }, 300); // slight delay to ensure reader is visible
-                                }).catch(err => {
-                                    console.error("Start error:", err);
-                                });
-                            }
-                        }).catch(err => {
-                            console.error("Camera error:", err);
-                        });
-                    };
-
-
-                    const stopScanner = () => {
-                        html5QrCode.stop().then(() => {
-                            reader.classList.add('d-none');
-                            scanAgainBtnWrapper.classList.remove('d-none');
-                        }).catch(err => {
-                            console.error("Stop error:", err);
-                        });
-                    };
-
-                    const onScanSuccess = qrMessage => {
-                        qrResultInput.value = qrMessage;
-                        stopScanner();
-                        setTimeout(() => {
-                            form.action += '#asset-details';
-                            form.submit();
-                        }, 300);
-                    };
-
-                    // Auto start scanner only if no POST data
-                    startScanner();
-                    scanAgainBtn?.addEventListener('click', function () {
-                        scanAgainBtnWrapper.classList.add('d-none');
-                        reader.classList.remove('d-none');
-                        qrResultInput.value = '';
-                        startScanner();
-
-                        // Scroll reader to top smoothly
-                        setTimeout(() => {
-                            reader.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }, 300);
-                    });
-                </script>
+            <div class="d-flex justify-content-center gap-2 mb-3">
+              <button id="start-scan-btn" class="btn btn-primary">Start QR Scan</button>
+              <button id="scan-again-btn" class="btn btn-secondary d-none">Scan Again</button>
+              <button id="scan-gallery-btn" class="btn btn-info">Scan from Gallery</button>
             </div>
 
+            <div id="reader" class="d-none"></div>
+
+            <input type="file" accept="image/*" id="qr-image-input" style="display:none" />
+
+            <div id="gallery-qr-result"></div>
+
+            <form method="GET" action="https://tiscoapi.oclocksoftware.info/api/qr-verify" id="asset-form" class="d-none">
+              <input type="hidden" name="bookingNumber" id="qr-result" />
+            </form>
+
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Load html5-qrcode with Html5QrcodeScanner -->
+  <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+  <script>
+    const reader = document.getElementById('reader');
+    const startScanBtn = document.getElementById('start-scan-btn');
+    const scanAgainBtn = document.getElementById('scan-again-btn');
+    const scanGalleryBtn = document.getElementById('scan-gallery-btn');
+    const qrImageInput = document.getElementById('qr-image-input');
+    const galleryResult = document.getElementById('gallery-qr-result');
+    const qrResultInput = document.getElementById('qr-result');
+    const form = document.getElementById('asset-form');
+
+    // Initialize scanner as null; will create on demand
+    let html5QrcodeScanner = null;
+
+    function onScanSuccess(decodedText, decodedResult) {
+      qrResultInput.value = decodedText;
+
+      // Stop scanning
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.clear().then(() => {
+          reader.classList.add('d-none');
+        }).catch(err => console.warn('Failed to clear scanner.', err));
+      }
+
+      scanAgainBtn.classList.remove('d-none');
+      startScanBtn.classList.add('d-none');
+      scanGalleryBtn.classList.remove('d-none');
+      galleryResult.textContent = '';
+
+      setTimeout(() => {
+        form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+        form.submit();
+      }, 300);
+    }
+
+    let html5QrCode = null;
+    let currentCameraId = null;
+
+    startScanBtn.addEventListener('click', async () => {
+        startScanBtn.classList.add('d-none');
+        scanAgainBtn.classList.add('d-none');
+        scanGalleryBtn.classList.add('d-none');
+        galleryResult.textContent = '';
+
+        reader.classList.remove('d-none');
+
+        try {
+        const devices = await Html5Qrcode.getCameras();
+        if (!devices || devices.length === 0) throw "No cameras found.";
+
+        // Try to select the back camera
+        const backCam = devices.find(cam =>
+            cam.label.toLowerCase().includes("back") || cam.label.toLowerCase().includes("rear")
+        );
+        currentCameraId = backCam ? backCam.id : devices[0].id;
+
+        html5QrCode = new Html5Qrcode("reader");
+        await html5QrCode.start(
+            { deviceId: { exact: currentCameraId } },
+            {
+            fps: 10,
+            qrbox: 250,
+            },
+            (decodedText, decodedResult) => {
+            html5QrCode.stop().then(() => {
+                reader.classList.add('d-none');
+                qrResultInput.value = decodedText;
+                form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+                form.submit();
+            });
+            },
+            (errorMessage) => {
+            // Optional: log scan failures
+            console.log("Scan error: ", errorMessage);
+            }
+        );
+        } catch (err) {
+        console.error("Camera error:", err);
+        galleryResult.textContent = "Camera access failed: " + err;
+        }
+    });
+
+    // Scan again button handler
+    scanAgainBtn.addEventListener('click', () => {
+      scanAgainBtn.classList.add('d-none');
+      startScanBtn.classList.add('d-none');
+      scanGalleryBtn.classList.add('d-none');
+      galleryResult.textContent = '';
+
+      reader.classList.remove('d-none');
+      // Clear previous and restart scanning
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.clear().then(() => {
+          html5QrcodeScanner.render(onScanSuccess);
+        });
+      } else {
+        html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+      }
+    });
+
+    // Scan from gallery handlers
+    scanGalleryBtn.addEventListener('click', () => {
+      qrImageInput.value = '';
+      qrImageInput.click();
+    });
+
+    qrImageInput.addEventListener('change', async (e) => {
+      if (!e.target.files.length) return;
+      const file = e.target.files[0];
+
+      if (html5QrcodeScanner) {
+        await html5QrcodeScanner.clear();
+        reader.classList.add('d-none');
+      }
+
+      scanAgainBtn.classList.add('d-none');
+      startScanBtn.classList.remove('d-none');
+      scanGalleryBtn.classList.remove('d-none');
+      galleryResult.textContent = 'Scanning image...';
+
+      const html5QrCode = new Html5Qrcode("reader");
+      html5QrCode.scanFile(file, true)
+        .then(decodedText => {
+          galleryResult.textContent = 'QR Result: ' + decodedText;
+          qrResultInput.value = decodedText;
+          form.classList.remove('d-none');
+          form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+          form.submit();
+        })
+        .catch(err => {
+          console.error('Error scanning file:', err);
+          galleryResult.textContent = 'No QR code found in the image.';
+        });
+    });
+  </script>
 </body>
 
 </html>

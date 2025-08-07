@@ -296,7 +296,6 @@ console.log("Generated slots:", timeSlots);
                                 <h3 className="text-[18px] text-gray-800">{serviceCenter.name}</h3>
                                 <p className="text-[15px] text-gray-600 mt-1">{serviceCenter.address}</p>
                                 <p className="text-[15px] text-gray-600">{serviceCenter.area}, {serviceCenter.state}</p>
-                                <p className="text-[15px] text-gray-600">{serviceCenter.phone }</p>
                             </div>
                             
                             {/* Date Selection */}
