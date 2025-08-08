@@ -43,7 +43,7 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
 }) => {
     const [selectedServices, setSelectedServices] = useState<string[]>(serviceStateDetails || []);
     const [remarks, setRemarks] = useState(serviceRemark || '');
-    const [packageType, setPackageType] = useState(servicePackage || 'A');
+    const [packageType, setPackageType] = useState(servicePackage || '');
     const [services, setServices] = useState<Service[]>([]);
     const dispatch = useAppDispatch();
     const currentSteps = (currentStepString: string) => {
@@ -123,12 +123,13 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
                                         </label>
                                         <img src={PackageA} className='mx-auto'/> */} 
                                         <div className="relative">
-                                            <h3 className="text-[18px] text-gray-800 mb-2">Select Package</h3>
+                                            {/* <h3 className="text-[18px] text-gray-800 mb-2">Select Package</h3> */}
                                             <select
                                                 value={packageType}
                                                 onChange={(e) => setPackageType(e.target.value)}
                                                 className="block appearance-none w-full px-3 py-2 cursor-pointer bg-white border border-gray-300 text-[16px] text-gray-800 focus:ring-blue-500 focus:border-blue-500"
                                             >
+                                                <option value="">Select Package</option>
                                                 <option value="A">Package A</option>
                                                 <option value="B">Package B</option>
                                                 <option value="F">Package F</option>
@@ -139,10 +140,11 @@ const ServiceType: React.FC<ServiceTypeProps> = ({
                                                 </svg>
                                             </div>
                                         </div>
-
+                                        {packageType && (
                                         <div className="text-center">
                                             <img src={packageImages[packageType]} alt={`Package ${packageType}`} className="mx-auto max-w-full" />
                                         </div>
+                                        )}
                                 </div>
                             </div>
 
