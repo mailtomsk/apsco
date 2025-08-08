@@ -321,7 +321,7 @@ const App: React.FC = () => {
                             onViewBookingHistory={handleViewBookingHistory}
                             serviceStateDetails={serviceDetails?.selectedServices || []}
                             serviceRemark={serviceDetails?.remarks || '' }
-                            servicePackage={serviceDetails?.packageType || 'A' }
+                            servicePackage={serviceDetails?.packageType || '' }
                             onLogin={handleLogin}
                             onViewLocation={handleViewLocation}
                         />
