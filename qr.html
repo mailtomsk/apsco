@@ -47,7 +47,7 @@
 
             <div id="gallery-qr-result"></div>
 
-            <form method="GET" action="https://tiscoapi.oclocksoftware.info/api/qr-verify" id="asset-form" class="d-none">
+            <form method="GET" action="https://api.tisco.com.my/api/qr-verify" id="asset-form" class="d-none">
               <input type="hidden" name="bookingNumber" id="qr-result" />
             </form>
 
@@ -88,7 +88,7 @@
       galleryResult.textContent = '';
 
       setTimeout(() => {
-        form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+        form.action = "https://api.tisco.com.my/api/qr-verify#asset-details";
         form.submit();
       }, 300);
     }
@@ -125,7 +125,7 @@
             html5QrCode.stop().then(() => {
                 reader.classList.add('d-none');
                 qrResultInput.value = decodedText;
-                form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+                form.action = "https://api.tisco.com.my/api/qr-verify#asset-details";
                 form.submit();
             });
             },
@@ -185,7 +185,7 @@
           galleryResult.textContent = 'QR Result: ' + decodedText;
           qrResultInput.value = decodedText;
           form.classList.remove('d-none');
-          form.action = "https://tiscoapi.oclocksoftware.info/api/qr-verify#asset-details";
+          form.action = "https://api.tisco.com.my/api/qr-verify#asset-details";
           form.submit();
         })
         .catch(err => {
